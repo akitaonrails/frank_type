@@ -1,7 +1,7 @@
 <% content_for :title, "Practice · Frank Type" %>
 <% content_for :body_controller, "typing" %>
 <% content_for :body_action, "keydown@window->typing#globalKeydown" %>
-<% content_for :typing_excerpts_value, json_escape(Typing::ExcerptCatalog.as_json.to_json) %>
+<% content_for :typing_excerpts_value, Typing::ExcerptCatalog.as_json.to_json.html_safe %>
 <% content_for :header_controls do %>
   <div class="flex flex-wrap items-center justify-center gap-2">
     <div class="flex flex-wrap justify-center gap-2" aria-label="Category">

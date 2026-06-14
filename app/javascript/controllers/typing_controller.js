@@ -65,6 +65,8 @@ export default class extends Controller {
   keydown(event) {
     if (["?", "Escape", "Tab"].includes(event.key)) {
       event.preventDefault()
+      event.stopPropagation()
+      this.handleControlKey(event.key)
       return
     }
 
@@ -92,12 +94,29 @@ export default class extends Controller {
   globalKeydown(event) {
     if (event.key === "?") {
       event.preventDefault()
-      this.openHelp()
+      this.handleControlKey(event.key)
       return
     }
 
     if (event.key === "Escape") {
       event.preventDefault()
+      this.handleControlKey(event.key)
+      return
+    }
+
+    if (event.key === "Tab") {
+      event.preventDefault()
+      this.handleControlKey(event.key)
+    }
+  }
+
+  handleControlKey(key) {
+    if (key === "?") {
+      this.openHelp()
+      return
+    }
+
+    if (key === "Escape") {
       if (this.helpIsOpen()) {
         this.closeHelp()
       } else {
@@ -106,10 +125,7 @@ export default class extends Controller {
       return
     }
 
-    if (event.key === "Tab") {
-      event.preventDefault()
-      if (!this.helpIsOpen()) this.nextExcerpt()
-    }
+    if (key === "Tab" && !this.helpIsOpen()) this.nextExcerpt()
   }
 
   openHelp() {

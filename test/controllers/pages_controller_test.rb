@@ -6,6 +6,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_select "[data-controller='typing']"
+    assert_includes response.body, "data-typing-excerpts-value=\"[{&quot;"
+    assert_not_includes response.body, "&amp;quot;"
     assert_select "[aria-label='Category']"
     assert_select "[data-typing-target='slowPairPanel']"
     assert_select "[role='dialog'][aria-labelledby='typing-help-title']"
