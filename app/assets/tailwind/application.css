@@ -26,4 +26,13 @@
   .choice-pill-active {
     @apply border-teal-300 bg-teal-300 text-slate-950 hover:text-slate-950;
   }
+
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -1,4 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
+import { raceProgress } from "lib/typing/race_progress"
 import { TypingSessionState } from "lib/typing/session_state"
 import { preferredSpeedBand, randomExcerptIndex } from "lib/typing/speed_band"
 import { SessionStore } from "lib/storage/session_store"
@@ -232,13 +233,15 @@ export default class extends Controller {
   }
 
   renderRaceTrack(metrics) {
-    const progress = this.session.targetText.length === 0 ? 0 : this.session.cursor / this.session.targetText.length
-    const elapsedRatio = this.session.started ? Math.min(this.session.elapsedMs / (this.durationSeconds * 1000), 1) : 0
-    const wpmRatio = Math.min(metrics.wpm / 120, 1)
+    const progress = raceProgress({
+      elapsedMs: this.session.elapsedMs,
+      durationSeconds: this.durationSeconds,
+      userWpm: metrics.wpm
+    })
 
-    this.moveRacer(this.slowRacerTarget, clamp((progress * 0.72) + (elapsedRatio * 0.08)))
-    this.moveRacer(this.userRacerTarget, clamp(progress))
-    this.moveRacer(this.fastRacerTarget, clamp((progress * 1.12) + (wpmRatio * 0.05)))
+    this.moveRacer(this.slowRacerTarget, progress.slow)
+    this.moveRacer(this.userRacerTarget, progress.user)
+    this.moveRacer(this.fastRacerTarget, progress.fast)
   }
 
   moveRacer(racer, progress) {
@@ -263,8 +266,4 @@ export default class extends Controller {
   get currentExcerpt() {
     return this.excerptsValue[this.excerptIndex]
   }
-}
-
-function clamp(value) {
-  return Math.max(0, Math.min(value, 1))
 }
