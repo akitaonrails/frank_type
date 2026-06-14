@@ -10,6 +10,7 @@ export default class extends Controller {
   static targets = [
     "accuracy",
     "durationButton",
+    "helpOverlay",
     "progress",
     "results",
     "resultSummary",
@@ -45,6 +46,19 @@ export default class extends Controller {
   }
 
   keydown(event) {
+    if (event.key === "?") {
+      event.preventDefault()
+      event.stopPropagation()
+      this.openHelp()
+      return
+    }
+
+    if (event.key === "Escape") {
+      event.preventDefault()
+      this.closeHelp()
+      return
+    }
+
     if (event.ctrlKey || event.metaKey) {
       this.handleShortcut(event)
       return
@@ -81,6 +95,35 @@ export default class extends Controller {
     this.render()
 
     if (this.session.shouldFinish()) this.finishSession()
+  }
+
+  globalKeydown(event) {
+    if (event.key === "?") {
+      event.preventDefault()
+      this.openHelp()
+    }
+
+    if (event.key === "Escape") {
+      event.preventDefault()
+      this.closeHelp()
+    }
+  }
+
+  openHelp() {
+    this.helpOverlayTarget.classList.remove("hidden")
+    this.helpOverlayTarget.classList.add("flex")
+  }
+
+  closeHelp() {
+    this.helpOverlayTarget.classList.add("hidden")
+    this.helpOverlayTarget.classList.remove("flex")
+    this.focus()
+  }
+
+  closeHelpFromBackdrop(event) {
+    if (event.target !== event.currentTarget) return
+
+    this.closeHelp()
   }
 
   handleShortcut(event) {
