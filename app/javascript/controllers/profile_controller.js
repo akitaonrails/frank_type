@@ -3,6 +3,10 @@ import { LineChart } from "lib/charts/line_chart"
 import { SessionStore } from "lib/storage/session_store"
 
 export default class extends Controller {
+  static values = {
+    i18n: Object
+  }
+
   static targets = [
     "accuracyChart",
     "averageAccuracy",
@@ -18,7 +22,7 @@ export default class extends Controller {
   }
 
   clearHistory() {
-    if (!window.confirm("Clear local typing history?")) return
+    if (!window.confirm(this.i18nValue.confirm_clear)) return
 
     SessionStore.clear()
     this.render()
@@ -33,8 +37,8 @@ export default class extends Controller {
     this.averageWpmTarget.textContent = average(sessions.map((session) => metric(session, "wpm")))
     this.averageAccuracyTarget.textContent = average(sessions.map((session) => metric(session, "accuracy")))
 
-    new LineChart(this.wpmChartTarget, { label: "WPM", color: "#5eead4" }).render(chronological.map((session) => metric(session, "wpm")).slice(-20))
-    new LineChart(this.accuracyChartTarget, { label: "Accuracy", color: "#c084fc" }).render(chronological.map((session) => metric(session, "accuracy")).slice(-20))
+    new LineChart(this.wpmChartTarget, { label: this.i18nValue.labels.wpm, color: "#5eead4", emptyLabel: this.i18nValue.chart_empty }).render(chronological.map((session) => metric(session, "wpm")).slice(-20))
+    new LineChart(this.accuracyChartTarget, { label: this.i18nValue.labels.accuracy, color: "#c084fc", emptyLabel: this.i18nValue.chart_empty }).render(chronological.map((session) => metric(session, "accuracy")).slice(-20))
 
     this.recentSessionsTarget.replaceChildren(...this.sessionRows(sessions.slice(0, 12)))
   }
@@ -43,7 +47,7 @@ export default class extends Controller {
     if (sessions.length === 0) {
       const empty = document.createElement("div")
       empty.className = "px-4 py-8 text-center text-slate-400"
-      empty.textContent = "No sessions yet. Finish one practice run to populate your profile."
+      empty.textContent = this.i18nValue.empty_sessions
       return [empty]
     }
 
@@ -55,8 +59,8 @@ export default class extends Controller {
         cell(formatDate(session?.finishedAt)),
         cell(metric(session, "wpm")),
         cell(`${metric(session, "accuracy")}%`),
-        cell(`${Number(session?.durationSeconds) || 0}s`),
-        cell(session?.title || "Untitled", "truncate")
+        cell(`${Number(session?.durationSeconds) || 0}${this.i18nValue.seconds_suffix}`),
+        cell(session?.title || this.i18nValue.untitled, "truncate")
       )
 
       return row
@@ -84,7 +88,7 @@ function cell(value, className = "") {
 
 function formatDate(value) {
   const date = new Date(value)
-  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString()
+  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString(document.documentElement.lang || undefined)
 }
 
 function metric(session, key) {

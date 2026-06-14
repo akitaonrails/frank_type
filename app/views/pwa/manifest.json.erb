@@ -1,5 +1,5 @@
 {
-  "name": "FrankType",
+  "name": <%= t("pwa.name").to_json.html_safe %>,
   "icons": [
     {
       "src": "/icon.png",
@@ -16,7 +16,7 @@
   "start_url": "/",
   "display": "standalone",
   "scope": "/",
-  "description": "FrankType.",
+  "description": <%= t("pwa.description").to_json.html_safe %>,
   "theme_color": "red",
   "background_color": "red"
 }

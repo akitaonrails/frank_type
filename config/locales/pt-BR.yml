@@ -1,0 +1,107 @@
+pt-BR:
+  app:
+    name: "Frank Type"
+    tagline: "prática de digitação com textos em domínio público"
+    nav:
+      practice: "Praticar"
+      profile: "Perfil"
+      sources: "Fontes"
+    locale:
+      label: "Idioma"
+      english: "English"
+      portuguese: "Português"
+  pages:
+    practice:
+      title: "Praticar · Frank Type"
+      category_label: "Categoria"
+      timer_label: "Duração"
+      categories:
+        random: "Aleatório"
+        scifi: "Ficção científica"
+        fantasy: "Fantasia"
+        biography: "Bio"
+      metrics:
+        wpm: "ppm"
+        accuracy: "precisão"
+        time: "tempo"
+        chars: "caracs."
+      state_ready: "clique aqui e comece a digitar"
+      typing_area_label: "Área de prática de digitação"
+      help_hint: "? ajuda · Esc reinicia · Tab novo texto"
+      slow_combinations: "Combinações lentas"
+      slow_combinations_help: "Somente teclas adjacentes corretas; pausas longas e correções são filtradas."
+      race_label: "Progresso da corrida"
+      racers:
+        slow: "lento"
+        you: "você"
+        fast: "rápido"
+      result_wpm: "PPM"
+      see_profile: "Ver perfil"
+      help:
+        eyebrow: "Teclado"
+        title: "Atalhos"
+        open: "Abrir esta ajuda"
+        close: "Fechar ajuda quando aberta"
+        restart: "Reiniciar texto atual quando a ajuda estiver fechada"
+        random: "Novo trecho aleatório"
+    profile:
+      title: "Perfil · Frank Type"
+      eyebrow: "Perfil local"
+      clear_history: "Limpar histórico"
+      metrics:
+        sessions: "sessões"
+        best_wpm: "melhor ppm"
+        average_wpm: "ppm médio"
+        average_accuracy: "precisão média"
+      charts:
+        wpm_trend: "Tendência de PPM"
+        accuracy_trend: "Tendência de precisão"
+      recent_sessions: "Sessões recentes"
+      practice: "Praticar"
+      table:
+        date: "Data"
+        wpm: "PPM"
+        accuracy: "Precisão"
+        duration: "Duração"
+        text: "Texto"
+    sources:
+      title: "Fontes · Frank Type"
+      eyebrow: "Corpus"
+      heading: "Plano de textos em domínio público."
+      body: "A ingestão automática deve usar feeds do Project Gutenberg, robot harvest, espelhos rsync ou metadados do Gutendex. Não raspe páginas humanas do Gutenberg. Guarde a atribuição em cada trecho."
+      speed_bands:
+        slow: "lento"
+        medium: "médio"
+        fast: "rápido"
+      words: "palavras"
+      characters: "caracteres"
+      source: "fonte"
+  js:
+    typing:
+      states:
+        complete: "completo"
+        typing: "digitando"
+        ready: "clique aqui e comece a digitar"
+      result:
+        accuracy: "de precisão"
+        keystrokes_captured: "teclas registradas"
+      slow_pair:
+        median: "mediana"
+        sample: "amostra"
+        samples: "amostras"
+        over_session_median: "acima da mediana da sessão"
+    profile:
+      confirm_clear: "Limpar o histórico local de digitação?"
+      labels:
+        wpm: "PPM"
+        accuracy: "Precisão"
+      chart_empty: "Finalize uma sessão para desenhar este gráfico"
+      empty_sessions: "Nenhuma sessão ainda. Finalize uma prática para preencher seu perfil."
+      untitled: "Sem título"
+      seconds_suffix: "s"
+      locale: "pt-BR"
+    chart:
+      default_label: "Valor"
+  pwa:
+    name: "FrankType"
+    description: "FrankType."

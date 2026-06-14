@@ -6,7 +6,8 @@ import { SessionStore } from "lib/storage/session_store"
 
 export default class extends Controller {
   static values = {
-    excerpts: Array
+    excerpts: Array,
+    i18n: Object
   }
 
   static targets = [
@@ -192,7 +193,7 @@ export default class extends Controller {
     this.scrollTextToTop({ smooth: true })
     this.resultsTarget.classList.remove("hidden")
     this.resultWpmTarget.textContent = result.metrics.wpm
-    this.resultDetailsTarget.textContent = `${result.metrics.accuracy}% accuracy · ${result.metrics.typedCharacters} keystrokes captured`
+    this.resultDetailsTarget.textContent = `${result.metrics.accuracy}% ${this.i18nValue.result.accuracy} · ${result.metrics.typedCharacters} ${this.i18nValue.result.keystrokes_captured}`
   }
 
   render() {
@@ -203,7 +204,7 @@ export default class extends Controller {
     this.timeLeftTarget.textContent = this.session.remainingSeconds
     this.progressTarget.textContent = `${this.session.cursor}/${this.session.targetText.length}`
     this.sourceTarget.textContent = `${this.currentExcerpt.title} · ${this.currentExcerpt.author}`
-    this.stateLabelTarget.textContent = this.session.finished ? "complete" : this.session.started ? "typing" : "click here and start typing"
+    this.stateLabelTarget.textContent = this.session.finished ? this.i18nValue.states.complete : this.session.started ? this.i18nValue.states.typing : this.i18nValue.states.ready
     const digraphSummary = this.session.finished ? this.session.digraphSummary() : emptyDigraphSummary()
     this.textTarget.replaceChildren(...this.characterSpans(digraphSummary))
     this.renderSlowPairs(digraphSummary)
@@ -314,7 +315,8 @@ export default class extends Controller {
     const element = document.createElement("span")
     element.className = "rounded-full border border-amber-200/20 bg-slate-950/50 px-3 py-1 font-mono text-xs text-amber-100"
     element.textContent = `${pair.displayPair} ${pair.medianLatencyMs}ms`
-    element.title = `${pair.displayPair}: median ${pair.medianLatencyMs}ms, ${pair.count} sample${pair.count === 1 ? "" : "s"}, ${Math.max(0, pair.medianLatencyMs - baselineMs)}ms over session median`
+    const sampleLabel = pair.count === 1 ? this.i18nValue.slow_pair.sample : this.i18nValue.slow_pair.samples
+    element.title = `${pair.displayPair}: ${this.i18nValue.slow_pair.median} ${pair.medianLatencyMs}ms, ${pair.count} ${sampleLabel}, ${Math.max(0, pair.medianLatencyMs - baselineMs)}ms ${this.i18nValue.slow_pair.over_session_median}`
     return element
   }
 

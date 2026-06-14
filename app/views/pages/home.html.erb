@@ -1,16 +1,17 @@
-<% content_for :title, "Practice · Frank Type" %>
+<% content_for :title, t("pages.practice.title") %>
 <% content_for :body_controller, "typing" %>
 <% content_for :body_action, "keydown@window->typing#globalKeydown" %>
 <% content_for :typing_excerpts_value, Typing::ExcerptCatalog.as_json.to_json.html_safe %>
+<% content_for :typing_i18n_value, t("js.typing").to_json.html_safe %>
 <% content_for :header_controls do %>
   <div class="flex flex-wrap items-center justify-center gap-2">
-    <div class="flex flex-wrap justify-center gap-2" aria-label="Category">
-      <% [["random", "Random"], ["scifi", "Sci-fi"], ["fantasy", "Fantasy"], ["biography", "Bio"]].each do |category, label| %>
-        <button type="button" class="choice-pill" data-action="typing#setCategory" data-typing-category-param="<%= category %>" data-typing-target="categoryButton"><%= label %></button>
+    <div class="flex flex-wrap justify-center gap-2" aria-label="<%= t("pages.practice.category_label") %>">
+      <% %w[random scifi fantasy biography].each do |category| %>
+        <button type="button" class="choice-pill" data-action="typing#setCategory" data-typing-category-param="<%= category %>" data-typing-target="categoryButton"><%= t("pages.practice.categories.#{category}") %></button>
       <% end %>
     </div>
     <span class="mx-1 hidden h-5 w-px bg-white/10 sm:inline-block" aria-hidden="true"></span>
-    <div class="flex flex-wrap justify-center gap-2" aria-label="Timer length">
+    <div class="flex flex-wrap justify-center gap-2" aria-label="<%= t("pages.practice.timer_label") %>">
       <% [15, 30, 60].each do |seconds| %>
         <button type="button" class="choice-pill" data-action="typing#setDuration" data-typing-duration-param="<%= seconds %>" data-typing-target="durationButton"><%= seconds %>s</button>
       <% end %>
@@ -22,22 +23,22 @@
   <div class="glass-panel p-4 sm:p-6 lg:p-8">
     <div class="mb-5 grid grid-cols-2 gap-x-8 gap-y-2 border-b border-white/10 pb-3 text-xs text-slate-500 sm:flex sm:items-center sm:gap-x-10 sm:text-sm">
       <div class="inline-flex items-baseline whitespace-nowrap">
-        <span class="mr-2 uppercase tracking-[0.18em]">wpm</span>
+        <span class="mr-2 uppercase tracking-[0.18em]"><%= t("pages.practice.metrics.wpm") %></span>
         <span class="font-mono text-base font-semibold text-slate-200 sm:text-lg" data-typing-target="wpm">0</span>
       </div>
       <div class="inline-flex items-baseline whitespace-nowrap">
-        <span class="mr-2 uppercase tracking-[0.18em]">accuracy</span>
+        <span class="mr-2 uppercase tracking-[0.18em]"><%= t("pages.practice.metrics.accuracy") %></span>
         <span class="font-mono text-base font-semibold text-slate-200 sm:text-lg"><span data-typing-target="accuracy">100</span><span class="text-slate-500">%</span></span>
       </div>
       <div class="inline-flex items-baseline whitespace-nowrap">
-        <span class="mr-2 uppercase tracking-[0.18em]">time</span>
+        <span class="mr-2 uppercase tracking-[0.18em]"><%= t("pages.practice.metrics.time") %></span>
         <span class="font-mono text-base font-semibold text-slate-200 sm:text-lg"><span data-typing-target="timeLeft">30</span><span class="text-slate-500">s</span></span>
       </div>
       <div class="inline-flex items-baseline whitespace-nowrap">
-        <span class="mr-2 uppercase tracking-[0.18em]">chars</span>
+        <span class="mr-2 uppercase tracking-[0.18em]"><%= t("pages.practice.metrics.chars") %></span>
         <span class="font-mono text-base font-semibold text-slate-200 sm:text-lg" data-typing-target="progress">0/0</span>
       </div>
-      <div class="ml-auto hidden text-right text-xs text-slate-500 sm:block" data-typing-target="stateLabel">click here and start typing</div>
+      <div class="ml-auto hidden text-right text-xs text-slate-500 sm:block" data-typing-target="stateLabel"><%= t("pages.practice.state_ready") %></div>
     </div>
 
     <button
@@ -46,11 +47,11 @@
       data-typing-target="typingSurface"
       data-action="click->typing#focus keydown->typing#keydown"
       tabindex="0"
-      aria-label="Typing practice area"
+      aria-label="<%= t("pages.practice.typing_area_label") %>"
     >
       <span class="mb-8 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500 sm:text-sm">
         <span data-typing-target="source"></span>
-        <span class="rounded-full border border-white/10 px-3 py-1 text-slate-500">? help · Esc restart · Tab new text</span>
+        <span class="rounded-full border border-white/10 px-3 py-1 text-slate-500"><%= t("pages.practice.help_hint") %></span>
       </span>
       <span class="scrollbar-hidden block max-h-[31vh] overflow-y-auto scroll-smooth pr-2" data-typing-target="textScroller">
         <span class="flex flex-wrap items-baseline gap-x-[0.55ch] gap-y-3 font-mono text-2xl leading-[1.65] tracking-normal text-slate-500 sm:text-3xl" data-typing-target="text"></span>
@@ -58,18 +59,18 @@
       <span class="absolute inset-x-4 bottom-4 hidden rounded-2xl border border-amber-300/20 bg-slate-950/75 px-4 py-3 shadow-2xl shadow-slate-950/40 backdrop-blur-md sm:inset-x-6" data-typing-target="slowPairPanel">
         <span class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <span>
-            <span class="block text-xs font-bold uppercase tracking-[0.24em] text-amber-100/90">Slow combinations</span>
-            <span class="mt-1 block text-xs text-slate-400">Correct adjacent key presses only; long pauses and corrections are filtered.</span>
+            <span class="block text-xs font-bold uppercase tracking-[0.24em] text-amber-100/90"><%= t("pages.practice.slow_combinations") %></span>
+            <span class="mt-1 block text-xs text-slate-400"><%= t("pages.practice.slow_combinations_help") %></span>
           </span>
           <span class="flex flex-wrap gap-2" data-typing-target="slowPairList"></span>
         </span>
       </span>
     </button>
 
-    <div class="mt-5 rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-3" aria-label="Race progress">
+    <div class="mt-5 rounded-2xl border border-white/10 bg-slate-950/35 px-4 py-3" aria-label="<%= t("pages.practice.race_label") %>">
       <% [["slow", "🐢", "slowRacer"], ["you", "⌨️", "userRacer"], ["fast", "🚀", "fastRacer"]].each do |label, glyph, target| %>
         <div class="relative h-9 border-t border-white/5 first:border-t-0">
-          <span class="absolute left-0 top-2 w-12 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-600"><%= label %></span>
+          <span class="absolute left-0 top-2 w-12 text-[10px] font-bold uppercase tracking-[0.22em] text-slate-600"><%= t("pages.practice.racers.#{label}") %></span>
           <span class="absolute right-0 top-2 opacity-50">🏁</span>
           <span class="absolute left-14 right-7 top-4 h-px bg-white/10"></span>
           <span data-typing-target="<%= target %>" class="absolute top-1 text-xl transition-all duration-300 ease-out <%= label == "you" ? "text-teal-200 drop-shadow-[0_0_8px_rgba(94,234,212,0.45)]" : "opacity-80" %>" style="left: 3.5rem;"><%= glyph %></span>
@@ -82,11 +83,11 @@
         <div>
           <div class="flex items-end gap-3">
             <span class="font-mono text-6xl font-black leading-none text-white sm:text-7xl" data-typing-target="resultWpm">0</span>
-            <span class="pb-2 text-sm font-bold uppercase tracking-[0.3em] text-teal-100">WPM</span>
+            <span class="pb-2 text-sm font-bold uppercase tracking-[0.3em] text-teal-100"><%= t("pages.practice.result_wpm") %></span>
           </div>
           <p class="mt-2 text-sm text-slate-300" data-typing-target="resultDetails"></p>
         </div>
-        <%= link_to "See profile", profile_path, class: "rounded-full bg-teal-300 px-5 py-3 text-center text-sm font-black text-slate-950 transition hover:bg-teal-200" %>
+        <%= link_to t("pages.practice.see_profile"), profile_path, class: "rounded-full bg-teal-300 px-5 py-3 text-center text-sm font-black text-slate-950 transition hover:bg-teal-200" %>
       </div>
     </div>
   </div>
@@ -102,27 +103,27 @@
     <div class="w-full max-w-md rounded-[1.75rem] border border-white/10 bg-slate-900 p-6 shadow-2xl shadow-slate-950/60">
       <div class="flex items-start justify-between gap-4">
         <div>
-          <p class="text-xs font-medium uppercase tracking-[0.35em] text-teal-200">Keyboard</p>
-          <h2 id="typing-help-title" class="mt-2 text-2xl font-black text-white">Shortcuts</h2>
+          <p class="text-xs font-medium uppercase tracking-[0.35em] text-teal-200"><%= t("pages.practice.help.eyebrow") %></p>
+          <h2 id="typing-help-title" class="mt-2 text-2xl font-black text-white"><%= t("pages.practice.help.title") %></h2>
         </div>
         <button type="button" class="rounded-full border border-white/10 px-3 py-1.5 text-sm font-semibold text-slate-300 transition hover:border-teal-300/50 hover:text-white" data-action="typing#closeHelp">Esc</button>
       </div>
 
       <dl class="mt-6 space-y-3 text-sm text-slate-300">
         <div class="flex items-center justify-between gap-4 rounded-2xl bg-white/[0.04] px-4 py-3">
-          <dt>Open this help</dt>
+          <dt><%= t("pages.practice.help.open") %></dt>
           <dd class="rounded-lg bg-slate-950 px-2 py-1 font-mono text-xs text-teal-100">?</dd>
         </div>
         <div class="flex items-center justify-between gap-4 rounded-2xl bg-white/[0.04] px-4 py-3">
-          <dt>Close help when open</dt>
+          <dt><%= t("pages.practice.help.close") %></dt>
           <dd class="rounded-lg bg-slate-950 px-2 py-1 font-mono text-xs text-teal-100">Esc</dd>
         </div>
         <div class="flex items-center justify-between gap-4 rounded-2xl bg-white/[0.04] px-4 py-3">
-          <dt>Restart current text when help is closed</dt>
+          <dt><%= t("pages.practice.help.restart") %></dt>
           <dd class="rounded-lg bg-slate-950 px-2 py-1 font-mono text-xs text-teal-100">Esc</dd>
         </div>
         <div class="flex items-center justify-between gap-4 rounded-2xl bg-white/[0.04] px-4 py-3">
-          <dt>Random new excerpt</dt>
+          <dt><%= t("pages.practice.help.random") %></dt>
           <dd class="rounded-lg bg-slate-950 px-2 py-1 font-mono text-xs text-teal-100">Tab</dd>
         </div>
       </dl>

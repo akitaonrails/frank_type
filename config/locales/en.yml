@@ -1,31 +1,107 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  app:
+    name: "Frank Type"
+    tagline: "public-domain typing practice"
+    nav:
+      practice: "Practice"
+      profile: "Profile"
+      sources: "Sources"
+    locale:
+      label: "Language"
+      english: "English"
+      portuguese: "Português"
+  pages:
+    practice:
+      title: "Practice · Frank Type"
+      category_label: "Category"
+      timer_label: "Timer length"
+      categories:
+        random: "Random"
+        scifi: "Sci-fi"
+        fantasy: "Fantasy"
+        biography: "Bio"
+      metrics:
+        wpm: "wpm"
+        accuracy: "accuracy"
+        time: "time"
+        chars: "chars"
+      state_ready: "click here and start typing"
+      typing_area_label: "Typing practice area"
+      help_hint: "? help · Esc restart · Tab new text"
+      slow_combinations: "Slow combinations"
+      slow_combinations_help: "Correct adjacent key presses only; long pauses and corrections are filtered."
+      race_label: "Race progress"
+      racers:
+        slow: "slow"
+        you: "you"
+        fast: "fast"
+      result_wpm: "WPM"
+      see_profile: "See profile"
+      help:
+        eyebrow: "Keyboard"
+        title: "Shortcuts"
+        open: "Open this help"
+        close: "Close help when open"
+        restart: "Restart current text when help is closed"
+        random: "Random new excerpt"
+    profile:
+      title: "Profile · Frank Type"
+      eyebrow: "Local profile"
+      clear_history: "Clear history"
+      metrics:
+        sessions: "sessions"
+        best_wpm: "best wpm"
+        average_wpm: "average wpm"
+        average_accuracy: "average accuracy"
+      charts:
+        wpm_trend: "WPM trend"
+        accuracy_trend: "Accuracy trend"
+      recent_sessions: "Recent sessions"
+      practice: "Practice"
+      table:
+        date: "Date"
+        wpm: "WPM"
+        accuracy: "Accuracy"
+        duration: "Duration"
+        text: "Text"
+    sources:
+      title: "Sources · Frank Type"
+      eyebrow: "Corpus"
+      heading: "Public-domain text plan."
+      body: "Automated ingestion should use Project Gutenberg feeds, robot harvest, rsync mirrors, or Gutendex metadata. Do not scrape Gutenberg human pages. Store attribution with every excerpt."
+      speed_bands:
+        slow: "slow"
+        medium: "medium"
+        fast: "fast"
+      words: "words"
+      characters: "characters"
+      source: "source"
+  js:
+    typing:
+      states:
+        complete: "complete"
+        typing: "typing"
+        ready: "click here and start typing"
+      result:
+        accuracy: "accuracy"
+        keystrokes_captured: "keystrokes captured"
+      slow_pair:
+        median: "median"
+        sample: "sample"
+        samples: "samples"
+        over_session_median: "over session median"
+    profile:
+      confirm_clear: "Clear local typing history?"
+      labels:
+        wpm: "WPM"
+        accuracy: "Accuracy"
+      chart_empty: "Finish a session to draw this chart"
+      empty_sessions: "No sessions yet. Finish one practice run to populate your profile."
+      untitled: "Untitled"
+      seconds_suffix: "s"
+      locale: "en-US"
+    chart:
+      default_label: "Value"
+  pwa:
+    name: "FrankType"
+    description: "FrankType."

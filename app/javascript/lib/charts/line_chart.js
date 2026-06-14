@@ -1,8 +1,9 @@
 export class LineChart {
-  constructor(canvas, { color = "#5eead4", label = "Value" } = {}) {
+  constructor(canvas, { color = "#5eead4", emptyLabel = "", label = "" } = {}) {
     this.canvas = canvas
     this.context = canvas.getContext("2d")
     this.color = color
+    this.emptyLabel = emptyLabel
     this.label = label
   }
 
@@ -27,9 +28,11 @@ export class LineChart {
     }
 
     if (values.length === 0) {
+      if (!this.emptyLabel) return
+
       context.fillStyle = "rgba(203, 213, 225, 0.7)"
       context.font = "20px sans-serif"
-      context.fillText("Finish a session to draw this chart", padding, height / 2)
+      context.fillText(this.emptyLabel, padding, height / 2)
       return
     }
 

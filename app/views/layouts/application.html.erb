@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html class="min-h-full bg-slate-950 text-slate-100">
+<html lang="<%= I18n.locale %>" class="min-h-full bg-slate-950 text-slate-100">
   <head>
-    <title><%= content_for(:title) || "Frank Type" %></title>
+    <title><%= content_for(:title) || t("app.name") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Frank Type">
+    <meta name="application-name" content="<%= t("app.name") %>">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -26,14 +26,15 @@
   <% body_data[:controller] = yield(:body_controller).strip if content_for?(:body_controller) %>
   <% body_data[:action] = yield(:body_action).strip if content_for?(:body_action) %>
   <% body_data[:typing_excerpts_value] = yield(:typing_excerpts_value).strip if content_for?(:typing_excerpts_value) %>
+  <% body_data[:typing_i18n_value] = yield(:typing_i18n_value).strip if content_for?(:typing_i18n_value) %>
 
   <body class="min-h-full bg-[radial-gradient(circle_at_top_left,_rgba(20,184,166,0.22),_transparent_30rem),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.18),_transparent_28rem),#020617] antialiased selection:bg-teal-300 selection:text-slate-950" <%= tag.attributes(data: body_data) %>>
     <header class="mx-auto grid w-full max-w-7xl grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-5 sm:px-6 lg:px-8">
       <%= link_to root_path, class: "group inline-flex items-center gap-3" do %>
-        <%= image_tag "/logo.png", alt: "Frank Type", class: "size-12 rounded-2xl shadow-lg shadow-teal-400/20 transition group-hover:rotate-3" %>
+        <%= image_tag "/logo.png", alt: t("app.name"), class: "size-12 rounded-2xl shadow-lg shadow-teal-400/20 transition group-hover:rotate-3" %>
         <span>
-          <span class="block text-sm font-semibold uppercase tracking-[0.34em] text-teal-200">Frank Type</span>
-          <span class="block text-xs text-slate-400">public-domain typing practice</span>
+          <span class="block text-sm font-semibold uppercase tracking-[0.34em] text-teal-200"><%= t("app.name") %></span>
+          <span class="block text-xs text-slate-400"><%= t("app.tagline") %></span>
         </span>
       <% end %>
 
@@ -42,9 +43,9 @@
       </div>
 
       <nav class="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 p-1 text-sm text-slate-300 backdrop-blur">
-        <%= link_to "Practice", root_path, class: "rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white" %>
-        <%= link_to "Profile", profile_path, class: "rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white" %>
-        <%= link_to "Sources", sources_path, class: "hidden rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white sm:inline-block" %>
+        <%= link_to t("app.nav.practice"), root_path, class: "rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white" %>
+        <%= link_to t("app.nav.profile"), profile_path, class: "rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white" %>
+        <%= link_to t("app.nav.sources"), sources_path, class: "hidden rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white sm:inline-block" %>
       </nav>
     </header>
 
@@ -57,5 +58,15 @@
     <main class="mx-auto w-full max-w-7xl px-4 pb-16 pt-4 sm:px-6 lg:px-8">
       <%= yield %>
     </main>
+
+    <div class="fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 text-xs text-slate-300">
+      <div class="inline-flex items-center gap-1 rounded-full border border-white/10 bg-slate-950/85 p-1 shadow-2xl shadow-slate-950/50 backdrop-blur-md">
+        <span class="px-3 py-1 text-slate-500"><%= t("app.locale.label") %></span>
+        <% [["en", t("app.locale.english")], ["pt-BR", t("app.locale.portuguese")]].each do |locale, label| %>
+          <% active = I18n.locale.to_s == locale %>
+          <%= link_to label, locale_switch_path(locale), class: "rounded-full px-3 py-1.5 font-semibold transition #{active ? "bg-teal-300 text-slate-950" : "text-slate-300 hover:bg-white/10 hover:text-white"}" %>
+        <% end %>
+      </div>
+    </div>
   </body>
 </html>
