@@ -6,6 +6,11 @@
 
 Frank Type is a Rails 8 typing trainer for practicing on normalized public-domain prose instead of random word lists. It is built for local-first, no-account use: session history, timing data, and profile charts stay in the browser's local storage.
 
+<p align="center">
+  <img src="docs/screenshots/frank-type-1.png" alt="Frank Type practice screen with digraph heat map" width="49%">
+  <img src="docs/screenshots/frank-type-2.png" alt="Frank Type local profile dashboard" width="49%">
+</p>
+
 ## Highlights
 
 - Rails-rendered UI with Hotwire, Stimulus, Importmap, and Tailwind CSS.
@@ -83,7 +88,8 @@ This follows the `frank_mega` compose pattern:
 1. Build/push `akitaonrails/frank_type:latest`.
 2. Copy `docker-compose.prod.yml` and a real `.env.production` to the homeserver.
 3. Create `/var/opt/docker/frank_type/storage` on the host.
-4. Run:
+4. Put a TLS reverse proxy in front of `127.0.0.1:3200`.
+5. Run:
 
 ```bash
 docker compose -f docker-compose.prod.yml pull

@@ -4,7 +4,8 @@ const MAX_SESSIONS = 100
 export class SessionStore {
   static all() {
     try {
-      return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "[]")
+      const sessions = JSON.parse(window.localStorage.getItem(STORAGE_KEY) || "[]")
+      return Array.isArray(sessions) ? sessions : []
     } catch (_error) {
       return []
     }
@@ -12,11 +13,21 @@ export class SessionStore {
 
   static save(session) {
     const sessions = [session, ...this.all()].slice(0, MAX_SESSIONS)
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions))
+
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions))
+    } catch (_error) {
+      return this.all()
+    }
+
     return sessions
   }
 
   static clear() {
-    window.localStorage.removeItem(STORAGE_KEY)
+    try {
+      window.localStorage.removeItem(STORAGE_KEY)
+    } catch (_error) {
+      // Local storage can be unavailable in hardened/private contexts.
+    }
   }
 }

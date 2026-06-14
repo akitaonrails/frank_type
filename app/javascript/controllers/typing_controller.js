@@ -319,7 +319,7 @@ export default class extends Controller {
   }
 
   moveRacer(racer, progress) {
-    racer.style.left = `${progress * 100}%`
+    racer.style.left = `calc(3.5rem + ${progress * 100}% - ${progress * 5.25}rem)`
   }
 
   scrollCursorIntoView() {

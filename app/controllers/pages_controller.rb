@@ -1,6 +1,5 @@
 class PagesController < ApplicationController
   def home
-    @excerpts = Typing::ExcerptCatalog.all
   end
 
   def profile

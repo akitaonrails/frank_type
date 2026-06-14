@@ -29,12 +29,12 @@ export default class extends Controller {
     const chronological = [...sessions].reverse()
 
     this.sessionCountTarget.textContent = sessions.length
-    this.bestWpmTarget.textContent = maximum(sessions.map((session) => session.metrics.wpm))
-    this.averageWpmTarget.textContent = average(sessions.map((session) => session.metrics.wpm))
-    this.averageAccuracyTarget.textContent = average(sessions.map((session) => session.metrics.accuracy))
+    this.bestWpmTarget.textContent = maximum(sessions.map((session) => metric(session, "wpm")))
+    this.averageWpmTarget.textContent = average(sessions.map((session) => metric(session, "wpm")))
+    this.averageAccuracyTarget.textContent = average(sessions.map((session) => metric(session, "accuracy")))
 
-    new LineChart(this.wpmChartTarget, { label: "WPM", color: "#5eead4" }).render(chronological.map((session) => session.metrics.wpm).slice(-20))
-    new LineChart(this.accuracyChartTarget, { label: "Accuracy", color: "#c084fc" }).render(chronological.map((session) => session.metrics.accuracy).slice(-20))
+    new LineChart(this.wpmChartTarget, { label: "WPM", color: "#5eead4" }).render(chronological.map((session) => metric(session, "wpm")).slice(-20))
+    new LineChart(this.accuracyChartTarget, { label: "Accuracy", color: "#c084fc" }).render(chronological.map((session) => metric(session, "accuracy")).slice(-20))
 
     this.recentSessionsTarget.replaceChildren(...this.sessionRows(sessions.slice(0, 12)))
   }
@@ -50,13 +50,15 @@ export default class extends Controller {
     return sessions.map((session) => {
       const row = document.createElement("div")
       row.className = "grid grid-cols-5 gap-2 px-4 py-3"
-      row.innerHTML = `
-        <span>${new Date(session.finishedAt).toLocaleDateString()}</span>
-        <span>${session.metrics.wpm}</span>
-        <span>${session.metrics.accuracy}%</span>
-        <span>${session.durationSeconds}s</span>
-        <span class="truncate" title="${escapeHtml(session.title)}">${escapeHtml(session.title)}</span>
-      `
+
+      row.append(
+        cell(formatDate(session?.finishedAt)),
+        cell(metric(session, "wpm")),
+        cell(`${metric(session, "accuracy")}%`),
+        cell(`${Number(session?.durationSeconds) || 0}s`),
+        cell(session?.title || "Untitled", "truncate")
+      )
+
       return row
     })
   }
@@ -72,8 +74,19 @@ function maximum(values) {
   return Math.max(...values)
 }
 
-function escapeHtml(value) {
-  const div = document.createElement("div")
-  div.textContent = value
-  return div.innerHTML
+function cell(value, className = "") {
+  const span = document.createElement("span")
+  span.textContent = value
+  if (className) span.className = className
+  if (className.includes("truncate")) span.title = value
+  return span
+}
+
+function formatDate(value) {
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString()
+}
+
+function metric(session, key) {
+  return Number(session?.metrics?.[key]) || 0
 }
