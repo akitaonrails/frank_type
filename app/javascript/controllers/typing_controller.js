@@ -257,13 +257,13 @@ export default class extends Controller {
   applyHeat(span, sample) {
     if (!sample) return
 
-    const alpha = 0.16 + (sample.heat * 0.5)
+    const alpha = 0.1 + (sample.heat * 0.35)
     const red = Math.round(251 + (239 - 251) * sample.heat)
     const green = Math.round(191 + (68 - 191) * sample.heat)
     const blue = Math.round(36 + (68 - 36) * sample.heat)
 
     span.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, ${alpha})`
-    span.style.boxShadow = `0 0 ${Math.round(4 + sample.heat * 10)}px rgba(${red}, ${green}, ${blue}, ${alpha / 1.4})`
+    span.style.boxShadow = `0 0 ${Math.round(2 + sample.heat * 7)}px rgba(${red}, ${green}, ${blue}, ${alpha / 1.8})`
     span.title = `${sample.displayPair}: ${sample.latencyMs}ms`
   }
 

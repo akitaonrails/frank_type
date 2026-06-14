@@ -1,3 +1,5 @@
+const ACTIONABLE_PAIR_LIMIT = 5
+
 export function calculateMetrics({ typedEvents = [], correctCharacters = 0, elapsedMs = 0, targetText = "" }) {
   const typedCharacters = typedEvents.filter((event) => event.action === "type").length
   const mistakes = typedEvents.filter((event) => event.action === "type" && !event.correct).length
@@ -67,10 +69,19 @@ export function summarizeDigraphs({ characterTimings = [], keyEvents = [], minLa
 
   const latencies = samples.map((sample) => sample.latencyMs).sort((left, right) => left - right)
   const baseline = median(latencies)
-  const high = Math.max(percentile(latencies, 0.9), baseline + 1)
+  const actionablePairs = rankPairs(samples)
+    .filter((pair) => pair.medianLatencyMs > baseline)
+    .slice(0, ACTIONABLE_PAIR_LIMIT)
+  const actionablePairMap = new Map(actionablePairs.map((pair) => [pair.pair, pair]))
+  const actionableGains = samples
+    .filter((sample) => actionablePairMap.has(sample.pair) && sample.latencyMs >= actionablePairMap.get(sample.pair).medianLatencyMs)
+    .map((sample) => sample.latencyMs - baseline)
+    .sort((left, right) => left - right)
+  const lowGain = Math.max(percentile(actionableGains, 0.25), 1)
+  const highGain = Math.max(percentile(actionableGains, 0.95), lowGain + 1)
   const heatedSamples = samples.map((sample) => ({
     ...sample,
-    heat: sample.latencyMs <= baseline ? 0 : clamp((sample.latencyMs - baseline) / (high - baseline))
+    heat: heatForSample({ actionablePairMap, baseline, highGain, lowGain, sample })
   }))
 
   return {
@@ -78,6 +89,17 @@ export function summarizeDigraphs({ characterTimings = [], keyEvents = [], minLa
     rankedPairs: rankPairs(heatedSamples),
     medianLatencyMs: baseline
   }
+}
+
+function heatForSample({ actionablePairMap, baseline, highGain, lowGain, sample }) {
+  const pair = actionablePairMap.get(sample.pair)
+  if (!pair) return 0
+  if (sample.latencyMs < pair.medianLatencyMs) return 0
+
+  const gain = sample.latencyMs - baseline
+  if (gain <= 0) return 0
+
+  return 0.35 + (clamp((gain - lowGain) / (highGain - lowGain)) * 0.65)
 }
 
 export function displayPair(pair) {
@@ -105,7 +127,7 @@ function rankPairs(samples) {
         heat: Math.max(...pairSamples.map((sample) => sample.heat))
       }
     })
-    .sort((left, right) => right.medianLatencyMs - left.medianLatencyMs)
+    .sort((left, right) => right.medianLatencyMs - left.medianLatencyMs || right.count - left.count)
 }
 
 function hasCorrectionBetween(backspaces, previousElapsedMs, currentElapsedMs) {

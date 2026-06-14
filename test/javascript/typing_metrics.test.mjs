@@ -81,3 +81,26 @@ test("summarizeDigraphs filters mistakes corrections and long pauses", () => {
 
   assert.deepEqual(summary.samples.map((sample) => sample.pair), ["de"])
 })
+
+test("summarizeDigraphs only heats the most actionable slow pairs", () => {
+  const latencies = [40, 45, 50, 55, 60, 65, 70, 75, 160, 180, 200, 220, 240, 260, 280]
+  const summary = summarizeDigraphs({ characterTimings: timingsFromLatencies(latencies), keyEvents: [] })
+  const heatedSamples = summary.samples.filter((sample) => sample.heat > 0)
+
+  assert.equal(heatedSamples.length, 5)
+  assert.deepEqual(heatedSamples.map((sample) => sample.latencyMs), [200, 220, 240, 260, 280])
+  assert(summary.samples.some((sample) => sample.latencyMs > summary.medianLatencyMs && sample.heat === 0))
+})
+
+function timingsFromLatencies(latencies) {
+  let elapsedMs = 0
+  const characters = "abcdefghijklmnopqrstuvwxyz"
+  const timings = [{ index: 0, expected: characters[0], correct: true, elapsedMs }]
+
+  latencies.forEach((latencyMs, index) => {
+    elapsedMs += latencyMs
+    timings.push({ index: index + 1, expected: characters[index + 1], correct: true, elapsedMs })
+  })
+
+  return timings
+}
