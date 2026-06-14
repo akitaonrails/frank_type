@@ -138,10 +138,11 @@ export default class extends Controller {
     this.resultsTarget.classList.add("hidden")
     this.session = new TypingSessionState({ excerpt: this.currentExcerpt, durationSeconds: this.durationSeconds })
     this.lastScrolledLineTop = null
-    this.textScrollerTarget.scrollTop = 0
+    this.scrollTextToTop()
     this.updateDurationButtons()
     this.updateCategoryButtons()
     this.render()
+    this.scrollTextToTop()
     this.focus()
   }
 
@@ -171,6 +172,7 @@ export default class extends Controller {
     const result = this.session.finish()
     SessionStore.save(result)
     this.render()
+    this.scrollTextToTop({ smooth: true })
     this.resultsTarget.classList.remove("hidden")
     this.resultSummaryTarget.textContent = `${result.metrics.wpm} WPM · ${result.metrics.accuracy}% accuracy · ${result.metrics.typedCharacters} keystrokes captured`
   }
@@ -303,6 +305,8 @@ export default class extends Controller {
   }
 
   scrollCursorIntoView() {
+    if (this.session.finished) return
+
     const current = this.textTarget.querySelector("[data-current='true']")
     if (!current) return
 
@@ -316,6 +320,20 @@ export default class extends Controller {
 
     this.lastScrolledLineTop = currentLineTop
     scroller.scrollBy({ top: this.lineScrollAmount(), behavior: "smooth" })
+  }
+
+  scrollTextToTop({ smooth = false } = {}) {
+    const scroller = this.textScrollerTarget
+
+    if (smooth) {
+      scroller.scrollTo({ top: 0, behavior: "smooth" })
+      return
+    }
+
+    const previousScrollBehavior = scroller.style.scrollBehavior
+    scroller.style.scrollBehavior = "auto"
+    scroller.scrollTop = 0
+    scroller.style.scrollBehavior = previousScrollBehavior
   }
 
   lineScrollAmount() {

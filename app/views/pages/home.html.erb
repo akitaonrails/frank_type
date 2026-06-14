@@ -1,28 +1,25 @@
 <% content_for :title, "Practice · Frank Type" %>
-
-<section
-  class="mx-auto max-w-6xl"
-  data-controller="typing"
-  data-action="keydown@window->typing#globalKeydown"
-  data-typing-excerpts-value="<%= json_escape(Typing::ExcerptCatalog.as_json.to_json) %>"
->
-  <div class="glass-panel p-4 sm:p-6 lg:p-8">
-    <div class="mb-4 border-b border-white/10 pb-3">
-      <div class="flex flex-wrap items-center justify-center gap-2">
-        <div class="flex flex-wrap justify-center gap-2" aria-label="Category">
-          <% [["random", "Random"], ["scifi", "Sci-fi"], ["fantasy", "Fantasy"], ["biography", "Bio"]].each do |category, label| %>
-            <button type="button" class="choice-pill" data-action="typing#setCategory" data-typing-category-param="<%= category %>" data-typing-target="categoryButton"><%= label %></button>
-          <% end %>
-        </div>
-        <span class="mx-1 hidden h-5 w-px bg-white/10 sm:inline-block" aria-hidden="true"></span>
-        <div class="flex flex-wrap justify-center gap-2" aria-label="Timer length">
-          <% [15, 30, 60].each do |seconds| %>
-            <button type="button" class="choice-pill" data-action="typing#setDuration" data-typing-duration-param="<%= seconds %>" data-typing-target="durationButton"><%= seconds %>s</button>
-          <% end %>
-        </div>
-      </div>
+<% content_for :body_controller, "typing" %>
+<% content_for :body_action, "keydown@window->typing#globalKeydown" %>
+<% content_for :typing_excerpts_value, json_escape(Typing::ExcerptCatalog.as_json.to_json) %>
+<% content_for :header_controls do %>
+  <div class="flex flex-wrap items-center justify-center gap-2">
+    <div class="flex flex-wrap justify-center gap-2" aria-label="Category">
+      <% [["random", "Random"], ["scifi", "Sci-fi"], ["fantasy", "Fantasy"], ["biography", "Bio"]].each do |category, label| %>
+        <button type="button" class="choice-pill" data-action="typing#setCategory" data-typing-category-param="<%= category %>" data-typing-target="categoryButton"><%= label %></button>
+      <% end %>
     </div>
+    <span class="mx-1 hidden h-5 w-px bg-white/10 sm:inline-block" aria-hidden="true"></span>
+    <div class="flex flex-wrap justify-center gap-2" aria-label="Timer length">
+      <% [15, 30, 60].each do |seconds| %>
+        <button type="button" class="choice-pill" data-action="typing#setDuration" data-typing-duration-param="<%= seconds %>" data-typing-target="durationButton"><%= seconds %>s</button>
+      <% end %>
+    </div>
+  </div>
+<% end %>
 
+<section class="mx-auto max-w-6xl">
+  <div class="glass-panel p-4 sm:p-6 lg:p-8">
     <div class="mb-5 grid grid-cols-2 gap-x-8 gap-y-2 border-b border-white/10 pb-3 text-xs text-slate-500 sm:flex sm:items-center sm:gap-x-10 sm:text-sm">
       <div class="inline-flex items-baseline whitespace-nowrap">
         <span class="mr-2 uppercase tracking-[0.18em]">wpm</span>
