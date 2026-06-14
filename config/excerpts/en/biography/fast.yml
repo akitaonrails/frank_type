@@ -1,0 +1,39 @@
+- id: grant-memoirs-fast-1
+  title: Personal Memoirs of U. S. Grant
+  author: Ulysses S. Grant
+  source: "Project Gutenberg ebook #4367"
+  source_url: https://www.gutenberg.org/ebooks/4367
+  text: >
+    My family is American, and has been for generations, in all its branches,
+    direct and collateral. Mathew Grant, the founder of the branch in America, of
+    which I am a descendant, reached Dorchester, Massachusetts, in May, sixteen
+    hundred and thirty. In eighteen hundred and twenty one my father moved to
+    Point Pleasant, Clermont County, Ohio. Here I was born on the twenty seventh
+    of April, eighteen hundred and twenty two. I was the first child, and
+    consequently could not have been named after any relative.
+- id: twain-mississippi-fast-1
+  title: Life on the Mississippi
+  author: Mark Twain
+  source: "Project Gutenberg ebook #245"
+  source_url: https://www.gutenberg.org/ebooks/245
+  text: >
+    The Mississippi is well worth reading about. It is not a commonplace river,
+    but on the contrary is in all ways remarkable. Considering the Missouri its
+    main branch, it is the longest river in the world, four thousand three
+    hundred miles. It seems safe to say that it is also the crookedest river in
+    the world, since in one part of its journey it uses up one thousand three
+    hundred miles to cover the same ground that the crow would fly over in six
+    hundred and seventy five.
+- id: tesla-inventions-fast-1
+  title: The Inventions, Researches and Writings of Nikola Tesla
+  author: Thomas Commerford Martin
+  source: "Project Gutenberg ebook #39272"
+  source_url: https://www.gutenberg.org/ebooks/39272
+  text: >
+    The present age is one of transition. The dynamos and motors, the
+    transformers and converters, the lamps and wires that now form part of daily
+    life have come with almost startling suddenness. The discoveries and
+    inventions of Nikola Tesla stand among the striking achievements of this
+    period. They are not merely improvements of detail, but new departures in the
+    production and use of electrical energy, and they have helped to shape the
+    industrial world into which modern men and women were born.

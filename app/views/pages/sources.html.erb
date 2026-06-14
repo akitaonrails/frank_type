@@ -15,7 +15,7 @@
             <h2 class="text-2xl font-black text-white"><%= excerpt.title %></h2>
             <p class="mt-1 text-sm text-slate-400"><%= excerpt.author %> · <%= excerpt.source %></p>
           </div>
-          <span class="w-fit rounded-full bg-teal-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-teal-100"><%= excerpt.difficulty %></span>
+          <span class="w-fit rounded-full bg-teal-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-teal-100"><%= excerpt.speed_band %></span>
         </div>
         <p class="mt-5 text-slate-300"><%= excerpt.normalized_text %></p>
         <p class="mt-4 text-xs text-slate-500"><%= excerpt.word_count %> words · <%= excerpt.character_count %> characters · <%= link_to "source", excerpt.source_url, class: "text-teal-200 hover:text-teal-100" %></p>

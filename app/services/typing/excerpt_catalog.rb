@@ -3,10 +3,13 @@ module Typing
     :id,
     :title,
     :author,
+    :language,
+    :category,
     :source,
     :source_url,
     :original_text,
     :normalized_text,
+    :speed_band,
     :difficulty,
     :word_count,
     :character_count
@@ -25,8 +28,18 @@ module Typing
       private
 
       def records
-        Rails.cache.fetch("typing/excerpt_catalog/v1") do
-          YAML.load_file(Rails.root.join("config/typing_excerpts.yml"))
+        Rails.cache.fetch("typing/excerpt_catalog/v2") do
+          Dir[Rails.root.join("config/excerpts/**/*.yml")].flat_map do |path|
+            language, category, speed_band = path.split("/config/excerpts/").last.delete_suffix(".yml").split("/")
+
+            YAML.load_file(path).map do |attributes|
+              attributes.merge(
+                "language" => attributes.fetch("language", language),
+                "category" => attributes.fetch("category", category),
+                "speed_band" => attributes.fetch("speed_band", speed_band)
+              )
+            end
+          end
         end
       end
 
@@ -37,10 +50,13 @@ module Typing
           id: attributes.fetch("id"),
           title: attributes.fetch("title"),
           author: attributes.fetch("author"),
+          language: attributes.fetch("language"),
+          category: attributes.fetch("category"),
           source: attributes.fetch("source"),
           source_url: attributes.fetch("source_url"),
           original_text: attributes.fetch("text"),
           normalized_text: normalized_text,
+          speed_band: attributes.fetch("speed_band"),
           difficulty: difficulty_for(normalized_text),
           word_count: normalized_text.split.size,
           character_count: normalized_text.length

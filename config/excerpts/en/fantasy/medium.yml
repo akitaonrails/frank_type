@@ -1,0 +1,36 @@
+- id: dickens-christmas-carol-medium-1
+  title: A Christmas Carol
+  author: Charles Dickens
+  source: "Project Gutenberg ebook #19337"
+  source_url: https://www.gutenberg.org/ebooks/19337
+  text: >
+    Marley was dead, to begin with. There is no doubt whatever about that. The
+    register of his burial was signed by the clergyman, the clerk, the
+    undertaker, and the chief mourner. Scrooge signed it, and Scrooge's name was
+    good upon change for anything he chose to put his hand to. Old Marley was as
+    dead as a door nail. Mind, I do not mean to say that I know, of my own
+    knowledge, what there is particularly dead about a door nail.
+- id: macdonald-princess-goblin-medium-1
+  title: The Princess and the Goblin
+  author: George MacDonald
+  source: "Project Gutenberg ebook #708"
+  source_url: https://www.gutenberg.org/ebooks/708
+  text: >
+    There was once a little princess whose father was king over a great country
+    full of mountains and valleys. His palace was built upon one of the mountains,
+    and was very grand and beautiful. The princess, whose name was Irene, was
+    born there, but she was sent, when very young, to be brought up by country
+    people in a large house, half castle, half farmhouse, on the side of another
+    mountain, about halfway between its base and its peak.
+- id: wilde-dorian-gray-medium-1
+  title: The Picture of Dorian Gray
+  author: Oscar Wilde
+  source: "Project Gutenberg ebook #174"
+  source_url: https://www.gutenberg.org/ebooks/174
+  text: >
+    The studio was filled with the rich odor of roses, and when the light summer
+    wind stirred amidst the trees of the garden, there came through the open door
+    the heavy scent of the lilac, or the more delicate perfume of the pink
+    flowering thorn. From the corner of the divan of Persian saddle bags on which
+    he was lying, smoking, as was his custom, innumerable cigarettes, Lord Henry
+    Wotton could just catch the gleam of the honey sweet blossoms.

@@ -1,0 +1,36 @@
+- id: franklin-autobiography-slow-1
+  title: The Autobiography of Benjamin Franklin
+  author: Benjamin Franklin
+  source: "Project Gutenberg ebook #20203"
+  source_url: https://www.gutenberg.org/ebooks/20203
+  text: >
+    From a child I was fond of reading, and all the little money that came into
+    my hands was ever laid out in books. Pleased with the Pilgrim's Progress, my
+    first collection was of John Bunyan's works in separate little volumes. I
+    afterward sold them to enable me to buy Burton's Historical Collections. They
+    were small chapmen's books, and cheap, forty or fifty in all. My father's
+    little library consisted chiefly of books in polemic divinity, most of which
+    I read.
+- id: keller-story-life-slow-1
+  title: The Story of My Life
+  author: Helen Keller
+  source: "Project Gutenberg ebook #2397"
+  source_url: https://www.gutenberg.org/ebooks/2397
+  text: >
+    I lived, up to the time of the illness that deprived me of my sight and
+    hearing, in a tiny house consisting of a large square room and a small one,
+    in which the servant slept. It is a custom in the South to build a small
+    house near the homestead as an annex to be used on occasion. Such a house my
+    father built after the Civil War, and when he married my mother they went to
+    live in it.
+- id: washington-up-from-slavery-slow-1
+  title: Up from Slavery
+  author: Booker T. Washington
+  source: "Project Gutenberg ebook #2376"
+  source_url: https://www.gutenberg.org/ebooks/2376
+  text: >
+    I was born a slave on a plantation in Franklin County, Virginia. I am not
+    quite sure of the exact place or exact date of my birth, but at any rate I
+    suspect I must have been born somewhere and at some time. As nearly as I have
+    been able to learn, I was born near a crossroads post office called Hale's
+    Ford, and the year was eighteen hundred and fifty eight or fifty nine.

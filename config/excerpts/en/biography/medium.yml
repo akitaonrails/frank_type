@@ -1,0 +1,37 @@
+- id: douglass-narrative-medium-1
+  title: Narrative of the Life of Frederick Douglass
+  author: Frederick Douglass
+  source: "Project Gutenberg ebook #23"
+  source_url: https://www.gutenberg.org/ebooks/23
+  text: >
+    I lived in Master Hugh's family about seven years. During this time I
+    succeeded in learning to read and write. In accomplishing this, I was
+    compelled to resort to various stratagems. I had no regular teacher. My
+    mistress, who had kindly commenced to instruct me, had, in compliance with
+    the advice and direction of her husband, not only ceased to instruct, but had
+    set her face against my being instructed by any one else. It is due, however,
+    to my mistress to say of her that she did not adopt this course at once.
+- id: darwin-autobiography-medium-1
+  title: The Autobiography of Charles Darwin
+  author: Charles Darwin
+  source: "Project Gutenberg ebook #2010"
+  source_url: https://www.gutenberg.org/ebooks/2010
+  text: >
+    I was born at Shrewsbury on February twelfth, eighteen hundred and nine. My
+    father, Robert Waring Darwin, was the son of Doctor Erasmus Darwin, whose name
+    is well known. My mother was the daughter of Josiah Wedgwood. A man may be
+    excused for speaking of himself when he writes an autobiography, and I shall
+    therefore give a few recollections of my early life, though they are chiefly
+    interesting to myself and to my children.
+- id: equiano-narrative-medium-1
+  title: The Interesting Narrative of the Life of Olaudah Equiano
+  author: Olaudah Equiano
+  source: "Project Gutenberg ebook #15399"
+  source_url: https://www.gutenberg.org/ebooks/15399
+  text: >
+    I believe it is difficult for those who publish their own memoirs to escape
+    the imputation of vanity, nor is this the only disadvantage under which they
+    labor. It is also their misfortune that whatever is uncommon is rarely, if
+    ever, believed, and what is obvious we are apt to turn from with disgust and
+    to charge the writer with impertinence. People generally think those memoirs
+    only worthy to be read or remembered which abound in great or striking events.

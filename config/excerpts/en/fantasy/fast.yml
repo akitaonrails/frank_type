@@ -1,0 +1,37 @@
+- id: stoker-dracula-fast-1
+  title: Dracula
+  author: Bram Stoker
+  source: "Project Gutenberg ebook #345"
+  source_url: https://www.gutenberg.org/ebooks/345
+  text: >
+    I had for breakfast more paprika, and a sort of porridge of maize flour which
+    they said was mamaliga, and egg plant stuffed with forcemeat, a very
+    excellent dish, which they call impletata. I had to hurry breakfast, for the
+    train started a little before eight, or rather it ought to have done so, for
+    after rushing to the station at half past seven I had to sit in the carriage
+    for more than an hour before we began to move.
+- id: stevenson-jekyll-hyde-fast-1
+  title: Strange Case of Dr. Jekyll and Mr. Hyde
+  author: Robert Louis Stevenson
+  source: "Project Gutenberg ebook #43"
+  source_url: https://www.gutenberg.org/ebooks/43
+  text: >
+    Mr. Utterson the lawyer was a man of a rugged countenance, that was never
+    lighted by a smile, cold, scanty and embarrassed in discourse, backward in
+    sentiment, lean, long, dusty, dreary, and yet somehow lovable. At friendly
+    meetings, and when the wine was to his taste, something eminently human
+    beaconed from his eye, something indeed which never found its way into his
+    talk, but which spoke not only in these silent symbols of the after dinner
+    face, but more often and loudly in the acts of his life.
+- id: james-turn-screw-fast-1
+  title: The Turn of the Screw
+  author: Henry James
+  source: "Project Gutenberg ebook #209"
+  source_url: https://www.gutenberg.org/ebooks/209
+  text: >
+    The story had held us, round the fire, sufficiently breathless, but except
+    the obvious remark that it was gruesome, as on Christmas Eve in an old house
+    a strange tale should essentially be, I remember no comment uttered till
+    somebody happened to say that it was the only case he had met in which such a
+    visitation had fallen on a child. The case, I may mention, was that of an
+    apparition in just such an old house as had gathered us for the occasion.

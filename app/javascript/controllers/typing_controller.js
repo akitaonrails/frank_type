@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { TypingSessionState } from "lib/typing/session_state"
+import { preferredSpeedBand, randomExcerptIndex } from "lib/typing/speed_band"
 import { SessionStore } from "lib/storage/session_store"
 
 export default class extends Controller {
@@ -9,22 +10,28 @@ export default class extends Controller {
 
   static targets = [
     "accuracy",
+    "categoryButton",
     "durationButton",
+    "fastRacer",
     "helpOverlay",
     "progress",
     "results",
     "resultSummary",
     "source",
+    "slowRacer",
     "stateLabel",
     "text",
+    "textScroller",
     "timeLeft",
     "typingSurface",
+    "userRacer",
     "wpm"
   ]
 
   connect() {
     this.durationSeconds = 30
-    this.excerptIndex = this.randomExcerptIndex()
+    this.selectedCategory = "random"
+    this.excerptIndex = this.randomCompatibleExcerptIndex()
     this.timer = null
 
     this.resetSession()
@@ -41,6 +48,13 @@ export default class extends Controller {
 
   setDuration(event) {
     this.durationSeconds = Number(event.params.duration)
+    this.resetSession()
+  }
+
+  setCategory(event) {
+    this.selectedCategory = event.params.category
+    this.excerptIndex = this.randomCompatibleExcerptIndex({ except: this.excerptIndex })
+    this.updateCategoryButtons()
     this.resetSession()
   }
 
@@ -120,23 +134,14 @@ export default class extends Controller {
     this.resultsTarget.classList.add("hidden")
     this.session = new TypingSessionState({ excerpt: this.currentExcerpt, durationSeconds: this.durationSeconds })
     this.updateDurationButtons()
+    this.updateCategoryButtons()
     this.render()
     this.focus()
   }
 
   nextExcerpt() {
-    this.excerptIndex = this.randomExcerptIndex({ except: this.excerptIndex })
+    this.excerptIndex = this.randomCompatibleExcerptIndex({ except: this.excerptIndex })
     this.resetSession()
-  }
-
-  randomExcerptIndex({ except = null } = {}) {
-    if (this.excerptsValue.length <= 1) return 0
-
-    let index = except
-    while (index === except) {
-      index = Math.floor(Math.random() * this.excerptsValue.length)
-    }
-    return index
   }
 
   startTicker() {
@@ -174,6 +179,8 @@ export default class extends Controller {
     this.sourceTarget.textContent = `${this.currentExcerpt.title} · ${this.currentExcerpt.author}`
     this.stateLabelTarget.textContent = this.session.finished ? "complete" : this.session.started ? "typing" : "click here and start typing"
     this.textTarget.replaceChildren(...this.characterSpans())
+    this.scrollCursorIntoView()
+    this.renderRaceTrack(metrics)
   }
 
   characterSpans() {
@@ -186,6 +193,7 @@ export default class extends Controller {
       const span = document.createElement("span")
       span.textContent = expected === " " ? " " : expected
       span.className = this.characterClass({ expected, actual, index })
+      if (index === this.session.cursor) span.dataset.current = "true"
       word.appendChild(span)
 
       if (expected === " ") {
@@ -212,13 +220,51 @@ export default class extends Controller {
   updateDurationButtons() {
     this.durationButtonTargets.forEach((button) => {
       const active = Number(button.dataset.typingDurationParam) === this.durationSeconds
-      button.classList.toggle("bg-teal-300", active)
-      button.classList.toggle("text-slate-950", active)
-      button.classList.toggle("border-teal-300", active)
+      button.classList.toggle("choice-pill-active", active)
+    })
+  }
+
+  updateCategoryButtons() {
+    this.categoryButtonTargets.forEach((button) => {
+      const active = button.dataset.typingCategoryParam === this.selectedCategory
+      button.classList.toggle("choice-pill-active", active)
+    })
+  }
+
+  renderRaceTrack(metrics) {
+    const progress = this.session.targetText.length === 0 ? 0 : this.session.cursor / this.session.targetText.length
+    const elapsedRatio = this.session.started ? Math.min(this.session.elapsedMs / (this.durationSeconds * 1000), 1) : 0
+    const wpmRatio = Math.min(metrics.wpm / 120, 1)
+
+    this.moveRacer(this.slowRacerTarget, clamp((progress * 0.72) + (elapsedRatio * 0.08)))
+    this.moveRacer(this.userRacerTarget, clamp(progress))
+    this.moveRacer(this.fastRacerTarget, clamp((progress * 1.12) + (wpmRatio * 0.05)))
+  }
+
+  moveRacer(racer, progress) {
+    racer.style.left = `${progress * 100}%`
+  }
+
+  scrollCursorIntoView() {
+    const current = this.textTarget.querySelector("[data-current='true']")
+    if (!current) return
+
+    current.scrollIntoView({ block: "nearest", inline: "nearest" })
+  }
+
+  randomCompatibleExcerptIndex({ except = null } = {}) {
+    return randomExcerptIndex(this.excerptsValue, {
+      category: this.selectedCategory,
+      except,
+      speedBand: preferredSpeedBand(SessionStore.all())
     })
   }
 
   get currentExcerpt() {
     return this.excerptsValue[this.excerptIndex]
   }
+}
+
+function clamp(value) {
+  return Math.max(0, Math.min(value, 1))
 }
