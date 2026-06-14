@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html class="min-h-full bg-slate-950 text-slate-100">
   <head>
     <title><%= content_for(:title) || "Frank Type" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -23,8 +23,24 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="min-h-full bg-[radial-gradient(circle_at_top_left,_rgba(20,184,166,0.22),_transparent_30rem),radial-gradient(circle_at_bottom_right,_rgba(168,85,247,0.18),_transparent_28rem),#020617] antialiased selection:bg-teal-300 selection:text-slate-950">
+    <header class="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-5 sm:px-6 lg:px-8">
+      <%= link_to root_path, class: "group inline-flex items-center gap-3" do %>
+        <span class="grid size-10 place-items-center rounded-2xl bg-teal-400 text-lg font-black text-slate-950 shadow-lg shadow-teal-400/20 transition group-hover:rotate-3">ft</span>
+        <span>
+          <span class="block text-sm font-semibold uppercase tracking-[0.34em] text-teal-200">Frank Type</span>
+          <span class="block text-xs text-slate-400">public-domain typing practice</span>
+        </span>
+      <% end %>
+
+      <nav class="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 p-1 text-sm text-slate-300 backdrop-blur">
+        <%= link_to "Practice", root_path, class: "rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white" %>
+        <%= link_to "Profile", profile_path, class: "rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white" %>
+        <%= link_to "Sources", sources_path, class: "hidden rounded-full px-4 py-2 transition hover:bg-white/10 hover:text-white sm:inline-block" %>
+      </nav>
+    </header>
+
+    <main class="mx-auto w-full max-w-7xl px-4 pb-16 pt-4 sm:px-6 lg:px-8">
       <%= yield %>
     </main>
   </body>

@@ -1,0 +1,25 @@
+<% content_for :title, "Sources · Frank Type" %>
+
+<section class="grid gap-8 lg:grid-cols-[24rem_minmax(0,1fr)]">
+  <aside class="glass-panel h-fit p-6">
+    <p class="text-sm font-medium uppercase tracking-[0.35em] text-teal-200">Corpus</p>
+    <h1 class="mt-3 text-4xl font-black tracking-tight text-white">Public-domain text plan.</h1>
+    <p class="mt-4 text-sm leading-6 text-slate-300">Automated ingestion should use Project Gutenberg feeds, robot harvest, rsync mirrors, or Gutendex metadata. Do not scrape Gutenberg human pages. Store attribution with every excerpt.</p>
+  </aside>
+
+  <div class="space-y-4">
+    <% @excerpts.each do |excerpt| %>
+      <article class="glass-panel p-6">
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h2 class="text-2xl font-black text-white"><%= excerpt.title %></h2>
+            <p class="mt-1 text-sm text-slate-400"><%= excerpt.author %> · <%= excerpt.source %></p>
+          </div>
+          <span class="w-fit rounded-full bg-teal-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-teal-100"><%= excerpt.difficulty %></span>
+        </div>
+        <p class="mt-5 text-slate-300"><%= excerpt.normalized_text %></p>
+        <p class="mt-4 text-xs text-slate-500"><%= excerpt.word_count %> words · <%= excerpt.character_count %> characters · <%= link_to "source", excerpt.source_url, class: "text-teal-200 hover:text-teal-100" %></p>
+      </article>
+    <% end %>
+  </div>
+</section>

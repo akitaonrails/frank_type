@@ -1,0 +1,45 @@
+- id: pride-and-prejudice-1
+  title: Pride and Prejudice
+  author: Jane Austen
+  source: Project Gutenberg ebook #1342
+  source_url: https://www.gutenberg.org/ebooks/1342
+  text: >
+    Mr. Bennet was so odd a mixture of quick parts, sarcastic humour, reserve,
+    and caprice, that the experience of three and twenty years had been
+    insufficient to make his wife understand his character.
+- id: alice-1
+  title: Alice's Adventures in Wonderland
+  author: Lewis Carroll
+  source: Project Gutenberg ebook #11
+  source_url: https://www.gutenberg.org/ebooks/11
+  text: >
+    Alice was beginning to get very tired of sitting by her sister on the bank,
+    and of having nothing to do. Once or twice she had peeped into the book her
+    sister was reading, but it had no pictures or conversations in it.
+- id: sherlock-1
+  title: The Adventures of Sherlock Holmes
+  author: Arthur Conan Doyle
+  source: Project Gutenberg ebook #1661
+  source_url: https://www.gutenberg.org/ebooks/1661
+  text: >
+    To Sherlock Holmes she is always the woman. I have seldom heard him mention
+    her under any other name. In his eyes she eclipses and predominates the whole
+    of her sex.
+- id: moby-dick-1
+  title: Moby-Dick
+  author: Herman Melville
+  source: Project Gutenberg ebook #2701
+  source_url: https://www.gutenberg.org/ebooks/2701
+  text: >
+    Whenever I find myself growing grim about the mouth, whenever it is a damp,
+    drizzly November in my soul, then I account it high time to get to sea as
+    soon as I can.
+- id: wizard-of-oz-1
+  title: The Wonderful Wizard of Oz
+  author: L. Frank Baum
+  source: Project Gutenberg ebook #55
+  source_url: https://www.gutenberg.org/ebooks/55
+  text: >
+    Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry,
+    who was a farmer, and Aunt Em, who was the farmer's wife. Their house was
+    small, for the lumber to build it had to be carried by wagon many miles.

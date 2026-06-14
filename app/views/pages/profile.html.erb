@@ -1,0 +1,45 @@
+<% content_for :title, "Profile · Frank Type" %>
+
+<section class="space-y-8" data-controller="profile">
+  <div class="glass-panel p-6 sm:p-8">
+    <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <div>
+        <p class="text-sm font-medium uppercase tracking-[0.35em] text-teal-200">Local profile</p>
+        <h1 class="mt-3 text-4xl font-black tracking-tight text-white sm:text-6xl">Progress without an account.</h1>
+        <p class="mt-4 max-w-2xl text-slate-300">These graphs are rendered from local storage. Clear browser data and the profile resets.</p>
+      </div>
+      <button type="button" class="rounded-full border border-red-300/30 px-5 py-3 text-sm font-bold text-red-100 transition hover:bg-red-400/10" data-action="profile#clearHistory">Clear history</button>
+    </div>
+  </div>
+
+  <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="metric-card"><p class="text-xs uppercase tracking-[0.24em] text-slate-500">sessions</p><p class="mt-2 text-3xl font-black text-white" data-profile-target="sessionCount">0</p></div>
+    <div class="metric-card"><p class="text-xs uppercase tracking-[0.24em] text-slate-500">best wpm</p><p class="mt-2 text-3xl font-black text-white" data-profile-target="bestWpm">0</p></div>
+    <div class="metric-card"><p class="text-xs uppercase tracking-[0.24em] text-slate-500">average wpm</p><p class="mt-2 text-3xl font-black text-white" data-profile-target="averageWpm">0</p></div>
+    <div class="metric-card"><p class="text-xs uppercase tracking-[0.24em] text-slate-500">average accuracy</p><p class="mt-2 text-3xl font-black text-white"><span data-profile-target="averageAccuracy">0</span><span class="text-lg text-slate-500">%</span></p></div>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-2">
+    <div class="glass-panel p-6">
+      <h2 class="text-xl font-black text-white">WPM trend</h2>
+      <canvas class="mt-6 h-72 w-full" data-profile-target="wpmChart" width="720" height="320"></canvas>
+    </div>
+    <div class="glass-panel p-6">
+      <h2 class="text-xl font-black text-white">Accuracy trend</h2>
+      <canvas class="mt-6 h-72 w-full" data-profile-target="accuracyChart" width="720" height="320"></canvas>
+    </div>
+  </div>
+
+  <div class="glass-panel p-6">
+    <div class="flex items-center justify-between gap-4">
+      <h2 class="text-xl font-black text-white">Recent sessions</h2>
+      <%= link_to "Practice", root_path, class: "rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/15" %>
+    </div>
+    <div class="mt-5 overflow-hidden rounded-3xl border border-white/10">
+      <div class="grid grid-cols-5 bg-white/5 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
+        <span>Date</span><span>WPM</span><span>Accuracy</span><span>Duration</span><span>Text</span>
+      </div>
+      <div data-profile-target="recentSessions" class="divide-y divide-white/10 text-sm text-slate-300"></div>
+    </div>
+  </div>
+</section>
