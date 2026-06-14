@@ -87,9 +87,18 @@ test("summarizeDigraphs only heats the most actionable slow pairs", () => {
   const summary = summarizeDigraphs({ characterTimings: timingsFromLatencies(latencies), keyEvents: [] })
   const heatedSamples = summary.samples.filter((sample) => sample.heat > 0)
 
-  assert.equal(heatedSamples.length, 5)
-  assert.deepEqual(heatedSamples.map((sample) => sample.latencyMs), [200, 220, 240, 260, 280])
+  assert.equal(heatedSamples.length, 3)
+  assert.deepEqual(heatedSamples.map((sample) => sample.latencyMs), [240, 260, 280])
   assert(summary.samples.some((sample) => sample.latencyMs > summary.medianLatencyMs && sample.heat === 0))
+})
+
+test("summarizeDigraphs caps heat to a small fraction of long sessions", () => {
+  const latencies = Array.from({ length: 80 }, (_value, index) => 50 + index * 6)
+  const summary = summarizeDigraphs({ characterTimings: timingsFromLatencies(latencies), keyEvents: [] })
+  const heatedSamples = summary.samples.filter((sample) => sample.heat > 0)
+
+  assert(heatedSamples.length <= 6)
+  assert(heatedSamples.length < summary.samples.length / 2)
 })
 
 function timingsFromLatencies(latencies) {
@@ -99,7 +108,7 @@ function timingsFromLatencies(latencies) {
 
   latencies.forEach((latencyMs, index) => {
     elapsedMs += latencyMs
-    timings.push({ index: index + 1, expected: characters[index + 1], correct: true, elapsedMs })
+    timings.push({ index: index + 1, expected: characters[(index + 1) % characters.length], correct: true, elapsedMs })
   })
 
   return timings

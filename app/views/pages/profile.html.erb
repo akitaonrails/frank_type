@@ -1,39 +1,39 @@
 <% content_for :title, t("pages.profile.title") %>
 
 <section class="space-y-6" data-controller="profile" data-profile-i18n-value="<%= t("js.profile").to_json %>">
-  <div class="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-500">
-    <p class="font-medium uppercase tracking-[0.3em] text-teal-200"><%= t("pages.profile.eyebrow") %></p>
-    <button type="button" class="rounded-full border border-red-300/25 px-3 py-1.5 font-semibold text-red-100/80 transition hover:bg-red-400/10 hover:text-red-100" data-action="profile#clearHistory"><%= t("pages.profile.clear_history") %></button>
+  <div class="text-subtle flex flex-wrap items-center justify-between gap-3 text-xs">
+    <p class="text-accent font-medium uppercase tracking-[0.3em]"><%= t("pages.profile.eyebrow") %></p>
+    <button type="button" class="danger-button" data-action="profile#clearHistory"><%= t("pages.profile.clear_history") %></button>
   </div>
 
   <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-    <div class="metric-card"><p class="text-xs uppercase tracking-[0.24em] text-slate-500"><%= t("pages.profile.metrics.sessions") %></p><p class="mt-2 text-3xl font-black text-white" data-profile-target="sessionCount">0</p></div>
-    <div class="metric-card"><p class="text-xs uppercase tracking-[0.24em] text-slate-500"><%= t("pages.profile.metrics.best_wpm") %></p><p class="mt-2 text-3xl font-black text-white" data-profile-target="bestWpm">0</p></div>
-    <div class="metric-card"><p class="text-xs uppercase tracking-[0.24em] text-slate-500"><%= t("pages.profile.metrics.average_wpm") %></p><p class="mt-2 text-3xl font-black text-white" data-profile-target="averageWpm">0</p></div>
-    <div class="metric-card"><p class="text-xs uppercase tracking-[0.24em] text-slate-500"><%= t("pages.profile.metrics.average_accuracy") %></p><p class="mt-2 text-3xl font-black text-white"><span data-profile-target="averageAccuracy">0</span><span class="text-lg text-slate-500">%</span></p></div>
+    <div class="metric-card"><p class="text-subtle text-xs uppercase tracking-[0.24em]"><%= t("pages.profile.metrics.sessions") %></p><p class="text-primary mt-2 text-3xl font-black" data-profile-target="sessionCount">0</p></div>
+    <div class="metric-card"><p class="text-subtle text-xs uppercase tracking-[0.24em]"><%= t("pages.profile.metrics.best_wpm") %></p><p class="text-primary mt-2 text-3xl font-black" data-profile-target="bestWpm">0</p></div>
+    <div class="metric-card"><p class="text-subtle text-xs uppercase tracking-[0.24em]"><%= t("pages.profile.metrics.average_wpm") %></p><p class="text-primary mt-2 text-3xl font-black" data-profile-target="averageWpm">0</p></div>
+    <div class="metric-card"><p class="text-subtle text-xs uppercase tracking-[0.24em]"><%= t("pages.profile.metrics.average_accuracy") %></p><p class="text-primary mt-2 text-3xl font-black"><span data-profile-target="averageAccuracy">0</span><span class="text-subtle text-lg">%</span></p></div>
   </div>
 
   <div class="grid gap-6 lg:grid-cols-2">
     <div class="glass-panel p-6">
-      <h2 class="text-xl font-black text-white"><%= t("pages.profile.charts.wpm_trend") %></h2>
+      <h2 class="text-primary text-xl font-black"><%= t("pages.profile.charts.wpm_trend") %></h2>
       <canvas class="mt-6 h-72 w-full" data-profile-target="wpmChart" width="720" height="320"></canvas>
     </div>
     <div class="glass-panel p-6">
-      <h2 class="text-xl font-black text-white"><%= t("pages.profile.charts.accuracy_trend") %></h2>
+      <h2 class="text-primary text-xl font-black"><%= t("pages.profile.charts.accuracy_trend") %></h2>
       <canvas class="mt-6 h-72 w-full" data-profile-target="accuracyChart" width="720" height="320"></canvas>
     </div>
   </div>
 
   <div class="glass-panel p-6">
     <div class="flex items-center justify-between gap-4">
-      <h2 class="text-xl font-black text-white"><%= t("pages.profile.recent_sessions") %></h2>
-      <%= link_to t("pages.profile.practice"), root_path, class: "rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/15" %>
+      <h2 class="text-primary text-xl font-black"><%= t("pages.profile.recent_sessions") %></h2>
+      <%= link_to t("pages.profile.practice"), root_path, class: "surface-button" %>
     </div>
-    <div class="mt-5 overflow-hidden rounded-3xl border border-white/10">
-      <div class="grid grid-cols-5 bg-white/5 px-4 py-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
+    <div class="table-frame">
+      <div class="table-head">
         <span><%= t("pages.profile.table.date") %></span><span><%= t("pages.profile.table.wpm") %></span><span><%= t("pages.profile.table.accuracy") %></span><span><%= t("pages.profile.table.duration") %></span><span><%= t("pages.profile.table.text") %></span>
       </div>
-      <div data-profile-target="recentSessions" class="divide-y divide-white/10 text-sm text-slate-300"></div>
+      <div data-profile-target="recentSessions" class="table-body text-sm"></div>
     </div>
   </div>
 </section>

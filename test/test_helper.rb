@@ -1,4 +1,19 @@
 ENV["RAILS_ENV"] ||= "test"
+
+if ENV["COVERAGE"] == "true"
+  require "simplecov"
+
+  SimpleCov.start "rails" do
+    enable_coverage :branch
+    add_filter "/test/"
+
+    add_group "Controllers", "app/controllers"
+    add_group "Services", "app/services"
+
+    minimum_coverage line: 85, branch: 70
+  end
+end
+
 require_relative "../config/environment"
 require "rails/test_help"
 
@@ -6,9 +21,6 @@ module ActiveSupport
   class TestCase
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
-
-    # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
-    fixtures :all
 
     # Add more helper methods to be used by all tests here...
   end

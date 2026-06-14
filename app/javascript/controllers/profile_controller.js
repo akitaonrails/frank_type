@@ -18,7 +18,13 @@ export default class extends Controller {
   ]
 
   connect() {
+    this.themeChanged = () => this.render()
+    window.addEventListener("theme:change", this.themeChanged)
     this.render()
+  }
+
+  disconnect() {
+    window.removeEventListener("theme:change", this.themeChanged)
   }
 
   clearHistory() {
@@ -32,13 +38,13 @@ export default class extends Controller {
     const sessions = SessionStore.all()
     const chronological = [...sessions].reverse()
 
-    this.sessionCountTarget.textContent = sessions.length
+    this.sessionCountTarget.textContent = sessions.reduce((sum, session) => sum + sampleCount(session), 0)
     this.bestWpmTarget.textContent = maximum(sessions.map((session) => metric(session, "wpm")))
-    this.averageWpmTarget.textContent = average(sessions.map((session) => metric(session, "wpm")))
-    this.averageAccuracyTarget.textContent = average(sessions.map((session) => metric(session, "accuracy")))
+    this.averageWpmTarget.textContent = weightedAverage(sessions, "wpm")
+    this.averageAccuracyTarget.textContent = weightedAverage(sessions, "accuracy")
 
-    new LineChart(this.wpmChartTarget, { label: this.i18nValue.labels.wpm, color: "#5eead4", emptyLabel: this.i18nValue.chart_empty }).render(chronological.map((session) => metric(session, "wpm")).slice(-20))
-    new LineChart(this.accuracyChartTarget, { label: this.i18nValue.labels.accuracy, color: "#c084fc", emptyLabel: this.i18nValue.chart_empty }).render(chronological.map((session) => metric(session, "accuracy")).slice(-20))
+    new LineChart(this.wpmChartTarget, { label: this.i18nValue.labels.wpm, color: themeColor("--chart-wpm"), emptyLabel: this.i18nValue.chart_empty }).render(chronological.map((session) => metric(session, "wpm")).slice(-20))
+    new LineChart(this.accuracyChartTarget, { label: this.i18nValue.labels.accuracy, color: themeColor("--chart-accuracy"), emptyLabel: this.i18nValue.chart_empty }).render(chronological.map((session) => metric(session, "accuracy")).slice(-20))
 
     this.recentSessionsTarget.replaceChildren(...this.sessionRows(sessions.slice(0, 12)))
   }
@@ -46,7 +52,7 @@ export default class extends Controller {
   sessionRows(sessions) {
     if (sessions.length === 0) {
       const empty = document.createElement("div")
-      empty.className = "px-4 py-8 text-center text-slate-400"
+      empty.className = "text-muted px-4 py-8 text-center"
       empty.textContent = this.i18nValue.empty_sessions
       return [empty]
     }
@@ -60,7 +66,7 @@ export default class extends Controller {
         cell(metric(session, "wpm")),
         cell(`${metric(session, "accuracy")}%`),
         cell(`${Number(session?.durationSeconds) || 0}${this.i18nValue.seconds_suffix}`),
-        cell(session?.title || this.i18nValue.untitled, "truncate")
+        cell(sessionTitle(session, this.i18nValue), "truncate")
       )
 
       return row
@@ -68,9 +74,20 @@ export default class extends Controller {
   }
 }
 
-function average(values) {
-  if (values.length === 0) return 0
-  return Math.round(values.reduce((sum, value) => sum + value, 0) / values.length)
+function themeColor(name) {
+  return window.getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+}
+
+function weightedAverage(sessions, key) {
+  const totals = sessions.reduce((result, session) => {
+    const value = metric(session, key)
+    const weight = sampleCount(session)
+    result.sum += value * weight
+    result.weight += weight
+    return result
+  }, { sum: 0, weight: 0 })
+
+  return totals.weight === 0 ? 0 : Math.round(totals.sum / totals.weight)
 }
 
 function maximum(values) {
@@ -93,4 +110,14 @@ function formatDate(value) {
 
 function metric(session, key) {
   return Number(session?.metrics?.[key]) || 0
+}
+
+function sampleCount(session) {
+  return Math.max(1, Number(session?.sampleCount) || 1)
+}
+
+function sessionTitle(session, i18n) {
+  if (!session?.summary) return session?.title || i18n.untitled
+
+  return `${i18n.daily_summary} (${sampleCount(session)} ${i18n.summary_sessions})`
 }

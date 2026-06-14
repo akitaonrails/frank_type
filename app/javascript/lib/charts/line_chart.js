@@ -14,10 +14,10 @@ export class LineChart {
     const padding = 36
 
     context.clearRect(0, 0, width, height)
-    context.fillStyle = "rgba(15, 23, 42, 0.75)"
+    context.fillStyle = themeColor("--chart-surface", "rgba(15, 23, 42, 0.75)")
     context.fillRect(0, 0, width, height)
 
-    context.strokeStyle = "rgba(148, 163, 184, 0.18)"
+    context.strokeStyle = themeColor("--chart-grid", "rgba(148, 163, 184, 0.18)")
     context.lineWidth = 1
     for (let index = 0; index < 5; index += 1) {
       const y = padding + ((height - padding * 2) / 4) * index
@@ -30,7 +30,7 @@ export class LineChart {
     if (values.length === 0) {
       if (!this.emptyLabel) return
 
-      context.fillStyle = "rgba(203, 213, 225, 0.7)"
+      context.fillStyle = themeColor("--chart-empty", "rgba(203, 213, 225, 0.7)")
       context.font = "20px sans-serif"
       context.fillText(this.emptyLabel, padding, height / 2)
       return
@@ -58,7 +58,7 @@ export class LineChart {
     context.stroke()
 
     points.forEach(([x, y]) => {
-      context.fillStyle = "#020617"
+      context.fillStyle = themeColor("--chart-point-fill", "#020617")
       context.beginPath()
       context.arc(x, y, 7, 0, Math.PI * 2)
       context.fill()
@@ -67,8 +67,12 @@ export class LineChart {
       context.stroke()
     })
 
-    context.fillStyle = "rgba(226, 232, 240, 0.82)"
+    context.fillStyle = themeColor("--chart-label", "rgba(226, 232, 240, 0.82)")
     context.font = "16px sans-serif"
     context.fillText(`${this.label}: ${values.at(-1)}`, padding, padding - 10)
   }
+}
+
+function themeColor(name, fallback) {
+  return window.getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback
 }

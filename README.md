@@ -17,6 +17,20 @@ Docker is the easiest way to run Frank Type. The image is published as `akitaonr
 
 ### Option 1: run the published image
 
+Fast launcher from GitHub:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/akitaonrails/frank_type/master/bin/docker-run.sh | bash
+```
+
+It defaults to <http://localhost:3200>. Override values when needed:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/akitaonrails/frank_type/master/bin/docker-run.sh | PORT=8080 HOST=localhost bash
+```
+
+Manual equivalent:
+
 ```bash
 docker run --rm \
   -p 3200:80 \
@@ -25,7 +39,6 @@ docker run --rm \
   -e HOST=localhost \
   -e FORCE_SSL=false \
   -e ASSUME_SSL=false \
-  -v frank_type_storage:/rails/storage \
   akitaonrails/frank_type:latest
 ```
 
@@ -42,9 +55,8 @@ Open <http://localhost:3200>.
 ### Production Docker Compose
 
 1. Copy `docker-compose.prod.yml` and a real `.env.production` to the server.
-2. Create `/var/opt/docker/frank_type/storage` on the host.
-3. Put a TLS reverse proxy in front of `127.0.0.1:3200`.
-4. Run:
+2. Put a TLS reverse proxy in front of `127.0.0.1:3200`.
+3. Run:
 
 ```bash
 docker compose -f docker-compose.prod.yml pull
@@ -87,17 +99,19 @@ GitHub Actions also publishes on pushes to `master`, tags matching `v*`, and man
 - Rails-rendered UI with Hotwire, Stimulus, Importmap, and Tailwind CSS.
 - Public-domain corpus organized for multiple languages: `config/excerpts/<language>/<category>/<speed>.yml`.
 - English and Brazilian Portuguese corpus categories: `scifi`, `fantasy`, and `biography`.
+- Locale-aware UI and corpus loading; normal requests load only the selected language.
+- Theme switcher with a preserved Slate theme and a logo-derived Rush palette.
 - Adaptive excerpt choice based on recent local WPM:
   - `slow`: sub-60 WPM
-  - `medium`: roughly 75–119 WPM
-  - `fast`: 120+ WPM
+  - `medium`: roughly 75–139 WPM
+  - `fast`: 140+ WPM
 - Category toggle with random fallback.
 - Timed sessions: 15s, 30s, and 60s.
 - Accurate browser-side key timing via `performance.now()`.
 - Per-session metrics: WPM, raw WPM, accuracy, mistakes, character timings, word timings, key events, and digraph timings.
 - Post-run digraph heat map: slow adjacent character pairs are highlighted after the timer ends.
 - Typeracer-style race strip with simulated slower/faster competitors.
-- Local profile page with WPM and accuracy trends.
+- Local profile page with WPM and accuracy trends; older detailed runs compact into daily summaries to keep browser storage bounded.
 - Docker-first local run, Docker Hub publishing, and production Compose deployment.
 
 ## Keyboard controls
@@ -125,7 +139,7 @@ npm test
 bin/rails tailwindcss:build
 ```
 
-`bin/ci` also runs RuboCop, Brakeman, bundler-audit, and importmap audit.
+`bin/ci` also runs RuboCop, Brakeman, bundler-audit, importmap audit, and SimpleCov-backed Rails tests.
 
 ## Corpus notes
 
@@ -136,3 +150,29 @@ Current English excerpts include public-domain Asimov stories available on Guten
 Current Brazilian Portuguese excerpts use public-domain Gutenberg texts from Machado de Assis, José de Alencar, Joaquim Nabuco, Visconde de Taunay, and Coelho Netto. Excerpts may modernize obsolete spellings for contemporary typing practice while preserving attribution to the source text.
 
 Target corpus size is at least 10 vetted excerpts per language/category/speed band.
+
+## Contributing locales and themes
+
+<p align="center">
+  <img src="docs/screenshots/frank-type-locale-theme.png" alt="Frank Type in Brazilian Portuguese with the Rush theme" width="100%">
+</p>
+
+### Locales
+
+- Add UI strings under `config/locales/<locale>.yml`.
+- Add excerpts under `config/excerpts/<locale>/<category>/<speed>.yml`.
+- Keep the current category/speed structure unless the app UI and tests are updated too.
+- Cite public-domain source metadata for every excerpt.
+- Locale selection order is query parameter, cookie, browser `Accept-Language`, then English fallback.
+
+### Themes
+
+- Theme tokens live in `app/assets/tailwind/application.css` as CSS variables keyed by `data-theme` on `<html>`.
+- Add new theme choices in `app/views/layouts/application.html.erb` and translations under `app.theme`.
+- Keep body text contrast at WCAG AA levels (`4.5:1` for normal text). Accent, focus, border, chart, and heat-map colors should be defined through variables, not hard-coded in views or JavaScript.
+- Theme preference is stored locally in the browser as `frankType.theme`; no server-side user storage exists.
+- Typing history is also browser-local. Recent sessions keep detailed timing data; older sessions are compacted into weighted daily summaries for graphs.
+
+## License
+
+Frank Type is released under the [MIT License](LICENSE).

@@ -1,4 +1,7 @@
-const ACTIONABLE_PAIR_LIMIT = 5
+const ACTIONABLE_PAIR_LIMIT = 3
+const MAX_HEATED_SAMPLE_LIMIT = 18
+const MAX_HEATED_SAMPLE_RATIO = 0.08
+const MIN_HEATED_SAMPLE_LIMIT = 3
 
 export function calculateMetrics({ typedEvents = [], correctCharacters = 0, elapsedMs = 0, targetText = "" }) {
   const typedCharacters = typedEvents.filter((event) => event.action === "type").length
@@ -73,15 +76,15 @@ export function summarizeDigraphs({ characterTimings = [], keyEvents = [], minLa
     .filter((pair) => pair.medianLatencyMs > baseline)
     .slice(0, ACTIONABLE_PAIR_LIMIT)
   const actionablePairMap = new Map(actionablePairs.map((pair) => [pair.pair, pair]))
-  const actionableGains = samples
-    .filter((sample) => actionablePairMap.has(sample.pair) && sample.latencyMs >= actionablePairMap.get(sample.pair).medianLatencyMs)
+  const heatableSamples = selectHeatableSamples({ actionablePairMap, baseline, samples })
+  const actionableGains = [...heatableSamples]
     .map((sample) => sample.latencyMs - baseline)
     .sort((left, right) => left - right)
   const lowGain = Math.max(percentile(actionableGains, 0.25), 1)
   const highGain = Math.max(percentile(actionableGains, 0.95), lowGain + 1)
   const heatedSamples = samples.map((sample) => ({
     ...sample,
-    heat: heatForSample({ actionablePairMap, baseline, highGain, lowGain, sample })
+    heat: heatForSample({ baseline, heatableSamples, highGain, lowGain, sample })
   }))
 
   return {
@@ -91,14 +94,24 @@ export function summarizeDigraphs({ characterTimings = [], keyEvents = [], minLa
   }
 }
 
-function heatForSample({ actionablePairMap, baseline, highGain, lowGain, sample }) {
-  const pair = actionablePairMap.get(sample.pair)
-  if (!pair) return 0
-  if (sample.latencyMs < pair.medianLatencyMs) return 0
+function selectHeatableSamples({ actionablePairMap, baseline, samples }) {
+  const limit = Math.min(
+    MAX_HEATED_SAMPLE_LIMIT,
+    Math.max(MIN_HEATED_SAMPLE_LIMIT, Math.floor(samples.length * MAX_HEATED_SAMPLE_RATIO))
+  )
+
+  return new Set(samples
+    .filter((sample) => actionablePairMap.has(sample.pair))
+    .filter((sample) => sample.latencyMs >= actionablePairMap.get(sample.pair).medianLatencyMs)
+    .filter((sample) => sample.latencyMs > baseline)
+    .sort((left, right) => (right.latencyMs - baseline) - (left.latencyMs - baseline))
+    .slice(0, limit))
+}
+
+function heatForSample({ baseline, heatableSamples, highGain, lowGain, sample }) {
+  if (!heatableSamples.has(sample)) return 0
 
   const gain = sample.latencyMs - baseline
-  if (gain <= 0) return 0
-
   return 0.35 + (clamp((gain - lowGain) / (highGain - lowGain)) * 0.65)
 }
 
@@ -124,7 +137,7 @@ function rankPairs(samples) {
         count: pairSamples.length,
         medianLatencyMs: median(latencies),
         maxLatencyMs: Math.max(...latencies),
-        heat: Math.max(...pairSamples.map((sample) => sample.heat))
+        heat: Math.max(...pairSamples.map((sample) => sample.heat || 0))
       }
     })
     .sort((left, right) => right.medianLatencyMs - left.medianLatencyMs || right.count - left.count)

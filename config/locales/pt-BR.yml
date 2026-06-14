@@ -10,6 +10,10 @@ pt-BR:
       label: "Idioma"
       english: "English"
       portuguese: "Português"
+    theme:
+      label: "Tema"
+      current: "Ardósia"
+      logo_rush: "Rush"
   pages:
     practice:
       title: "Praticar · Frank Type"
@@ -97,6 +101,8 @@ pt-BR:
         accuracy: "Precisão"
       chart_empty: "Finalize uma sessão para desenhar este gráfico"
       empty_sessions: "Nenhuma sessão ainda. Finalize uma prática para preencher seu perfil."
+      daily_summary: "Resumo diário"
+      summary_sessions: "sessões"
       untitled: "Sem título"
       seconds_suffix: "s"
       locale: "pt-BR"

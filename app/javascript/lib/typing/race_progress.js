@@ -1,5 +1,5 @@
 const SLOW_RACER_WPM = 60
-const FAST_RACER_WPM = 120
+const FAST_RACER_WPM = 140
 
 export function raceProgress({ elapsedMs = 0, durationSeconds = 30, userWpm = 0 } = {}) {
   const elapsedRatio = clamp(elapsedMs / Math.max(durationSeconds * 1000, 1))

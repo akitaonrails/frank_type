@@ -10,7 +10,8 @@ test("preferredSpeedBand defaults new users to slow", () => {
 test("preferredSpeedBand uses recent average WPM", () => {
   assert.equal(preferredSpeedBand([{ metrics: { wpm: 55 } }, { metrics: { wpm: 62 } }]), "slow")
   assert.equal(preferredSpeedBand([{ metrics: { wpm: 91 } }, { metrics: { wpm: 83 } }]), "medium")
-  assert.equal(preferredSpeedBand([{ metrics: { wpm: 125 } }, { metrics: { wpm: 132 } }]), "fast")
+  assert.equal(preferredSpeedBand([{ metrics: { wpm: 125 } }, { metrics: { wpm: 132 } }]), "medium")
+  assert.equal(preferredSpeedBand([{ metrics: { wpm: 145 } }, { metrics: { wpm: 152 } }]), "fast")
 })
 
 test("randomExcerptIndex prefers the matching speed band", () => {

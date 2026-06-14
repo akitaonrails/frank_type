@@ -7,8 +7,6 @@ services:
     restart: always
     ports:
       - "127.0.0.1:3200:80"
-    volumes:
-      - /var/opt/docker/frank_type/storage:/rails/storage
     security_opt:
       - label:disable
     env_file:

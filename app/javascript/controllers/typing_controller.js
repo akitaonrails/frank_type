@@ -258,22 +258,27 @@ export default class extends Controller {
     if (!sample) return
 
     const alpha = 0.1 + (sample.heat * 0.35)
-    const red = Math.round(251 + (239 - 251) * sample.heat)
-    const green = Math.round(191 + (68 - 191) * sample.heat)
-    const blue = Math.round(36 + (68 - 36) * sample.heat)
+    const [red, green, blue] = this.heatRgb(sample.heat)
 
     span.style.backgroundColor = `rgba(${red}, ${green}, ${blue}, ${alpha})`
     span.style.boxShadow = `0 0 ${Math.round(2 + sample.heat * 7)}px rgba(${red}, ${green}, ${blue}, ${alpha / 1.8})`
     span.title = `${sample.displayPair}: ${sample.latencyMs}ms`
   }
 
+  heatRgb(heat) {
+    const styles = window.getComputedStyle(document.documentElement)
+    const token = heat > 0.66 ? "--color-heat-high-rgb" : heat > 0.33 ? "--color-heat-mid-rgb" : "--color-heat-low-rgb"
+    const rgb = styles.getPropertyValue(token).trim().split(/\s+/).map((value) => Number.parseInt(value, 10))
+    return rgb.length === 3 && rgb.every(Number.isFinite) ? rgb : [251, 191, 36]
+  }
+
   characterClass({ expected, actual, index }) {
     const base = "relative inline-block rounded px-px transition-colors "
     const spacing = expected === " " ? "w-[0.65ch] " : ""
-    if (index === this.session.cursor && !this.session.finished) return `${base}${spacing}bg-teal-300/25 text-white after:absolute after:-bottom-1 after:left-0 after:h-1 after:w-full after:rounded-full after:bg-teal-300`
-    if (actual === undefined) return `${base}${spacing}text-slate-500`
-    if (actual === expected) return `${base}${spacing}text-teal-100`
-    return `${base}${spacing}bg-rose-400/20 text-rose-200`
+    if (index === this.session.cursor && !this.session.finished) return `${base}${spacing}char-current after:absolute after:-bottom-1 after:left-0 after:h-1 after:w-full after:rounded-full`
+    if (actual === undefined) return `${base}${spacing}char-untyped`
+    if (actual === expected) return `${base}${spacing}char-correct`
+    return `${base}${spacing}char-mistake`
   }
 
   updateDurationButtons() {
@@ -313,7 +318,7 @@ export default class extends Controller {
 
   slowPairElement(pair, baselineMs) {
     const element = document.createElement("span")
-    element.className = "rounded-full border border-amber-200/20 bg-slate-950/50 px-3 py-1 font-mono text-xs text-amber-100"
+    element.className = "slow-pair-chip"
     element.textContent = `${pair.displayPair} ${pair.medianLatencyMs}ms`
     const sampleLabel = pair.count === 1 ? this.i18nValue.slow_pair.sample : this.i18nValue.slow_pair.samples
     element.title = `${pair.displayPair}: ${this.i18nValue.slow_pair.median} ${pair.medianLatencyMs}ms, ${pair.count} ${sampleLabel}, ${Math.max(0, pair.medianLatencyMs - baselineMs)}ms ${this.i18nValue.slow_pair.over_session_median}`

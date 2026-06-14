@@ -6,17 +6,10 @@ services:
     build: .
     ports:
       - "3200:80"
-    volumes:
-      - storage:/rails/storage
     environment:
       RAILS_ENV: production
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:-development-only-secret-key-base-change-me-development-only-secret-key-base}
-      RAILS_MASTER_KEY: ${RAILS_MASTER_KEY:-}
       HOST: ${HOST:-localhost}
       FORCE_SSL: ${FORCE_SSL:-false}
       ASSUME_SSL: ${ASSUME_SSL:-false}
-      SOLID_QUEUE_IN_PUMA: ${SOLID_QUEUE_IN_PUMA:-true}
     restart: unless-stopped
-
-volumes:
-  storage:

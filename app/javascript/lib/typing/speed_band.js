@@ -10,7 +10,7 @@ export function preferredSpeedBand(sessions = []) {
 
   const averageWpm = recentWpms.reduce((sum, wpm) => sum + wpm, 0) / recentWpms.length
 
-  if (averageWpm >= 120) return "fast"
+  if (averageWpm >= 140) return "fast"
   if (averageWpm >= 75) return "medium"
   return "slow"
 }

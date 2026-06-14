@@ -2,9 +2,9 @@
 
 <section class="grid gap-8 lg:grid-cols-[24rem_minmax(0,1fr)]">
   <aside class="glass-panel h-fit p-6">
-    <p class="text-sm font-medium uppercase tracking-[0.35em] text-teal-200"><%= t("pages.sources.eyebrow") %></p>
-    <h1 class="mt-3 text-4xl font-black tracking-tight text-white"><%= t("pages.sources.heading") %></h1>
-    <p class="mt-4 text-sm leading-6 text-slate-300"><%= t("pages.sources.body") %></p>
+    <p class="text-accent text-sm font-medium uppercase tracking-[0.35em]"><%= t("pages.sources.eyebrow") %></p>
+    <h1 class="text-primary mt-3 text-4xl font-black tracking-tight"><%= t("pages.sources.heading") %></h1>
+    <p class="text-body mt-4 text-sm leading-6"><%= t("pages.sources.body") %></p>
   </aside>
 
   <div class="space-y-4">
@@ -12,13 +12,13 @@
       <article class="glass-panel p-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h2 class="text-2xl font-black text-white"><%= excerpt.title %></h2>
-            <p class="mt-1 text-sm text-slate-400"><%= excerpt.author %> · <%= excerpt.source %></p>
+            <h2 class="text-primary text-2xl font-black"><%= excerpt.title %></h2>
+            <p class="text-muted mt-1 text-sm"><%= excerpt.author %> · <%= excerpt.source %></p>
           </div>
-          <span class="w-fit rounded-full bg-teal-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.2em] text-teal-100"><%= t("pages.sources.speed_bands.#{excerpt.speed_band}") %></span>
+          <span class="speed-badge"><%= t("pages.sources.speed_bands.#{excerpt.speed_band}") %></span>
         </div>
-        <p class="mt-5 text-slate-300"><%= excerpt.normalized_text %></p>
-        <p class="mt-4 text-xs text-slate-500"><%= excerpt.word_count %> <%= t("pages.sources.words") %> · <%= excerpt.character_count %> <%= t("pages.sources.characters") %> · <%= link_to t("pages.sources.source"), excerpt.source_url, class: "text-teal-200 hover:text-teal-100" %></p>
+        <p class="text-body mt-5"><%= excerpt.normalized_text %></p>
+        <p class="text-subtle mt-4 text-xs"><%= excerpt.word_count %> <%= t("pages.sources.words") %> · <%= excerpt.character_count %> <%= t("pages.sources.characters") %> · <%= link_to t("pages.sources.source"), excerpt.source_url, class: "text-accent" %></p>
       </article>
     <% end %>
   </div>

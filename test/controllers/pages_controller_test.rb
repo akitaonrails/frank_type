@@ -5,7 +5,7 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_url
 
     assert_response :success
-    assert_select "[data-controller='typing']"
+    assert_select "[data-controller~='typing']"
     assert_includes response.body, "data-typing-excerpts-value=\"[{&quot;"
     assert_not_includes response.body, "&amp;quot;"
     assert_select "[aria-label='Category']"
@@ -13,6 +13,9 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "[role='dialog'][aria-labelledby='typing-help-title']"
     assert_select "#typing-help-title", text: "Shortcuts"
     assert_select "a[href='/?locale=pt-BR']", text: "Português"
+    assert_select "html[data-theme='current']"
+    assert_select "body[data-controller~='theme'][data-controller~='typing']"
+    assert_select "button[data-theme-theme-param='logo-rush']", text: "Rush"
     assert_includes response.headers.fetch("Content-Security-Policy"), "script-src 'self' 'nonce-"
     assert_match(/<script[^>]+nonce=/, response.body)
   end

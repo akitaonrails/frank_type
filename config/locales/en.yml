@@ -10,6 +10,10 @@ en:
       label: "Language"
       english: "English"
       portuguese: "Português"
+    theme:
+      label: "Theme"
+      current: "Slate"
+      logo_rush: "Rush"
   pages:
     practice:
       title: "Practice · Frank Type"
@@ -97,6 +101,8 @@ en:
         accuracy: "Accuracy"
       chart_empty: "Finish a session to draw this chart"
       empty_sessions: "No sessions yet. Finish one practice run to populate your profile."
+      daily_summary: "Daily summary"
+      summary_sessions: "sessions"
       untitled: "Untitled"
       seconds_suffix: "s"
       locale: "en-US"
