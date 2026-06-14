@@ -6,6 +6,6 @@ class PagesController < ApplicationController
   end
 
   def sources
-    @excerpts = Typing::ExcerptCatalog.all
+    @excerpts = Typing::ExcerptCatalog.all(locale: I18n.locale)
   end
 end

@@ -17,28 +17,48 @@ module Typing
 
   class ExcerptCatalog
     class << self
-      def all
-        records.map { |attributes| build_excerpt(attributes) }
+      def all(locale: nil)
+        records_for(locale).map { |attributes| build_excerpt(attributes) }
       end
 
-      def as_json
-        all.map { |excerpt| excerpt.to_h.except(:original_text) }
+      def as_json(locale: nil)
+        all(locale: locale).map { |excerpt| excerpt.to_h.except(:original_text) }
       end
 
       private
 
+      def records_for(locale)
+        return records if locale.blank?
+
+        language = locale.to_s
+        matching_records = records_for_language(language)
+        return matching_records if matching_records.any?
+
+        records_for_language(I18n.default_locale.to_s)
+      end
+
       def records
         Rails.cache.fetch("typing/excerpt_catalog/v2") do
-          Dir[Rails.root.join("config/excerpts/**/*.yml")].flat_map do |path|
-            language, category, speed_band = path.split("/config/excerpts/").last.delete_suffix(".yml").split("/")
+          load_records(Dir[Rails.root.join("config/excerpts/**/*.yml")])
+        end
+      end
 
-            YAML.load_file(path).map do |attributes|
-              attributes.merge(
-                "language" => attributes.fetch("language", language),
-                "category" => attributes.fetch("category", category),
-                "speed_band" => attributes.fetch("speed_band", speed_band)
-              )
-            end
+      def records_for_language(language)
+        Rails.cache.fetch("typing/excerpt_catalog/#{language}/v2") do
+          load_records(Dir[Rails.root.join("config/excerpts", language, "**/*.yml")])
+        end
+      end
+
+      def load_records(paths)
+        paths.flat_map do |path|
+          language, category, speed_band = path.split("/config/excerpts/").last.delete_suffix(".yml").split("/")
+
+          YAML.load_file(path).map do |attributes|
+            attributes.merge(
+              "language" => attributes.fetch("language", language),
+              "category" => attributes.fetch("category", category),
+              "speed_band" => attributes.fetch("speed_band", speed_band)
+            )
           end
         end
       end

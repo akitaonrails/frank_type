@@ -36,6 +36,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "html[lang='pt-BR']"
     assert_select "#typing-help-title", text: "Atalhos"
+    assert_includes response.body, "&quot;language&quot;:&quot;pt-BR&quot;"
+    assert_not_includes response.body, "&quot;language&quot;:&quot;en&quot;"
     assert_equal "pt-BR", cookies[:locale]
   end
 
