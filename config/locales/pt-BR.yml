@@ -30,6 +30,7 @@ pt-BR:
         time: "tempo"
         chars: "caracs."
       state_ready: "clique aqui e comece a digitar"
+      paused_hint: "clique para continuar"
       typing_area_label: "Área de prática de digitação"
       help_hint: "? ajuda · Esc reinicia · Tab novo texto"
       slow_combinations: "Combinações lentas"
@@ -86,6 +87,7 @@ pt-BR:
         complete: "completo"
         typing: "digitando"
         ready: "clique aqui e comece a digitar"
+        paused: "pausado"
       result:
         accuracy: "de precisão"
         keystrokes_captured: "teclas registradas"

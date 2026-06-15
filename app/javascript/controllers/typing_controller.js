@@ -16,6 +16,7 @@ export default class extends Controller {
     "durationButton",
     "fastRacer",
     "helpOverlay",
+    "pausedOverlay",
     "progress",
     "results",
     "resultDetails",
@@ -52,6 +53,37 @@ export default class extends Controller {
     this.typingSurfaceTarget.focus()
   }
 
+  surfaceBlurred() {
+    if (!this.session.started || this.session.finished || this.session.paused) return
+
+    this.session.pause()
+    this.stopTicker()
+    this.showPausedOverlay()
+    this.render()
+  }
+
+  surfaceFocused() {
+    const wasPaused = this.session.paused
+    this.session.resume()
+    this.hidePausedOverlay()
+
+    if (!wasPaused) return
+
+    this.startTicker()
+    this.render()
+    if (this.session.shouldFinish()) this.finishSession()
+  }
+
+  showPausedOverlay() {
+    this.pausedOverlayTarget.classList.remove("hidden")
+    this.typingSurfaceTarget.classList.add("is-paused")
+  }
+
+  hidePausedOverlay() {
+    this.pausedOverlayTarget.classList.add("hidden")
+    this.typingSurfaceTarget.classList.remove("is-paused")
+  }
+
   setDuration(event) {
     this.durationSeconds = Number(event.params.duration)
     this.resetSession()
@@ -86,6 +118,7 @@ export default class extends Controller {
     if (event.key.length !== 1 || event.altKey) return
 
     event.preventDefault()
+    this.hidePausedOverlay()
     this.session.type(event.key.toLowerCase())
     this.startTicker()
     this.render()
@@ -153,6 +186,7 @@ export default class extends Controller {
 
   resetSession() {
     this.stopTicker()
+    this.hidePausedOverlay()
     this.resultsTarget.classList.add("hidden")
     this.session = new TypingSessionState({ excerpt: this.currentExcerpt, durationSeconds: this.durationSeconds })
     this.lastScrolledLineTop = null
@@ -187,6 +221,7 @@ export default class extends Controller {
 
   finishSession() {
     this.stopTicker()
+    this.hidePausedOverlay()
     const result = this.session.finish()
     SessionStore.save(result)
     this.render()
@@ -204,7 +239,7 @@ export default class extends Controller {
     this.timeLeftTarget.textContent = this.session.remainingSeconds
     this.progressTarget.textContent = `${this.session.cursor}/${this.session.targetText.length}`
     this.sourceTarget.textContent = `${this.currentExcerpt.title} · ${this.currentExcerpt.author}`
-    this.stateLabelTarget.textContent = this.session.finished ? this.i18nValue.states.complete : this.session.started ? this.i18nValue.states.typing : this.i18nValue.states.ready
+    this.stateLabelTarget.textContent = this.session.finished ? this.i18nValue.states.complete : this.session.paused ? this.i18nValue.states.paused : this.session.started ? this.i18nValue.states.typing : this.i18nValue.states.ready
     const digraphSummary = this.session.finished ? this.session.digraphSummary() : emptyDigraphSummary()
     this.textTarget.replaceChildren(...this.characterSpans(digraphSummary))
     this.renderSlowPairs(digraphSummary)

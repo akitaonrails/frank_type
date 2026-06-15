@@ -30,6 +30,7 @@ en:
         time: "time"
         chars: "chars"
       state_ready: "click here and start typing"
+      paused_hint: "click to resume"
       typing_area_label: "Typing practice area"
       help_hint: "? help · Esc restart · Tab new text"
       slow_combinations: "Slow combinations"
@@ -86,6 +87,7 @@ en:
         complete: "complete"
         typing: "typing"
         ready: "click here and start typing"
+        paused: "paused"
       result:
         accuracy: "accuracy"
         keystrokes_captured: "keystrokes captured"

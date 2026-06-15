@@ -11,6 +11,8 @@ export class TypingSessionState {
     this.startedAtEpoch = null
     this.startedAtPerformance = null
     this.finishedAtEpoch = null
+    this.pausedMs = 0
+    this.pausedAtPerformance = null
   }
 
   get started() {
@@ -19,6 +21,10 @@ export class TypingSessionState {
 
   get finished() {
     return this.finishedAtEpoch !== null
+  }
+
+  get paused() {
+    return this.pausedAtPerformance !== null
   }
 
   get cursor() {
@@ -32,11 +38,16 @@ export class TypingSessionState {
   get elapsedMs() {
     if (!this.started) return 0
     const end = this.finishedAtEpoch ? this.finishedAtPerformance : performance.now()
-    return Math.max(0, end - this.startedAtPerformance)
+    return Math.max(0, end - this.startedAtPerformance - this.pausedSoFar(end))
   }
 
   get remainingSeconds() {
     return Math.max(0, Math.ceil(this.durationSeconds - (this.elapsedMs / 1000)))
+  }
+
+  pausedSoFar(now = performance.now()) {
+    const ongoing = this.pausedAtPerformance !== null ? now - this.pausedAtPerformance : 0
+    return this.pausedMs + ongoing
   }
 
   start(now = performance.now()) {
@@ -46,15 +57,30 @@ export class TypingSessionState {
     this.startedAtPerformance = now
   }
 
+  pause(now = performance.now()) {
+    if (!this.started || this.finished || this.paused) return
+
+    this.pausedAtPerformance = now
+  }
+
+  resume(now = performance.now()) {
+    if (!this.paused) return false
+
+    this.pausedMs += now - this.pausedAtPerformance
+    this.pausedAtPerformance = null
+    return true
+  }
+
   type(character, now = performance.now()) {
     this.start(now)
+    this.resume(now)
 
     if (this.finished || this.cursor >= this.targetText.length) return
 
     const index = this.cursor
     const expected = this.targetText[index]
     const correct = character === expected
-    const elapsedMs = Math.round(now - this.startedAtPerformance)
+    const elapsedMs = Math.round(now - this.startedAtPerformance - this.pausedSoFar(now))
 
     this.typedCharacters.push(character)
     this.keyEvents.push({ action: "type", index, expected, actual: character, correct, elapsedMs })
@@ -64,8 +90,9 @@ export class TypingSessionState {
   backspace(now = performance.now()) {
     if (!this.started || this.finished || this.cursor === 0) return
 
+    this.resume(now)
     const index = this.cursor - 1
-    const elapsedMs = Math.round(now - this.startedAtPerformance)
+    const elapsedMs = Math.round(now - this.startedAtPerformance - this.pausedSoFar(now))
     this.keyEvents.push({ action: "backspace", index, elapsedMs })
     this.typedCharacters.pop()
     this.characterTimings = this.characterTimings.filter((timing) => timing.index !== index)

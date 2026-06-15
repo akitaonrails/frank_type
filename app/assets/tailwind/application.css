@@ -223,6 +223,23 @@
     box-shadow: 0 0 0 4px var(--color-focus);
   }
 
+  .typing-surface.is-paused .typing-text {
+    @apply blur-sm;
+  }
+
+  .typing-paused-overlay {
+    @apply absolute inset-0 z-10 flex items-center justify-center;
+    background: color-mix(in srgb, var(--color-surface-strong) 55%, transparent);
+    backdrop-filter: blur(2px);
+  }
+
+  .typing-paused-hint {
+    @apply rounded-full border px-4 py-2 text-sm font-semibold uppercase tracking-[0.18em];
+    border-color: var(--color-accent-border);
+    background: var(--color-accent-soft);
+    color: var(--color-accent-hover);
+  }
+
   .help-chip {
     @apply rounded-full border px-3 py-1;
     border-color: var(--color-border);
