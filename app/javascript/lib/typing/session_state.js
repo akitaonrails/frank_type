@@ -64,10 +64,11 @@ export class TypingSessionState {
   }
 
   resume(now = performance.now()) {
-    if (!this.paused) return
+    if (!this.paused) return false
 
     this.pausedMs += now - this.pausedAtPerformance
     this.pausedAtPerformance = null
+    return true
   }
 
   type(character, now = performance.now()) {
@@ -89,6 +90,7 @@ export class TypingSessionState {
   backspace(now = performance.now()) {
     if (!this.started || this.finished || this.cursor === 0) return
 
+    this.resume(now)
     const index = this.cursor - 1
     const elapsedMs = Math.round(now - this.startedAtPerformance - this.pausedSoFar(now))
     this.keyEvents.push({ action: "backspace", index, elapsedMs })

@@ -63,7 +63,15 @@ export default class extends Controller {
   }
 
   surfaceFocused() {
+    const wasPaused = this.session.paused
+    this.session.resume()
     this.hidePausedOverlay()
+
+    if (!wasPaused) return
+
+    this.startTicker()
+    this.render()
+    if (this.session.shouldFinish()) this.finishSession()
   }
 
   showPausedOverlay() {
