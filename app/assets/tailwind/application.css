@@ -218,9 +218,16 @@
     --tw-ring-color: var(--color-focus);
   }
 
-  .typing-surface:focus {
+  .typing-surface:focus,
+  .typing-surface:focus-within {
     border-color: var(--color-accent-border);
     box-shadow: 0 0 0 4px var(--color-focus);
+  }
+
+  .typing-input-sink {
+    @apply absolute h-px w-px opacity-0;
+    left: 0;
+    top: 0;
   }
 
   .typing-surface.is-paused .typing-text {

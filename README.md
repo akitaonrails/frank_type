@@ -99,6 +99,7 @@ GitHub Actions also publishes on pushes to `master`, tags matching `v*`, and man
 - Rails-rendered UI with Hotwire, Stimulus, Importmap, and Tailwind CSS.
 - Public-domain corpus organized for multiple languages: `config/excerpts/<language>/<category>/<speed>.yml`.
 - English and Brazilian Portuguese corpus categories: `scifi`, `fantasy`, and `biography`.
+- Brazilian Portuguese practice preserves accents/diacritics and is intended to train US-layout dead keys, Option accents, and other composed accent entry.
 - Locale-aware UI and corpus loading; normal requests load only the selected language.
 - Theme switcher with a preserved Slate theme and a logo-derived Rush palette.
 - Adaptive excerpt choice based on recent local WPM:

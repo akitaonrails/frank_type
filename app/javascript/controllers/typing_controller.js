@@ -1,5 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { backwardDeletionIntent } from "lib/typing/deletion"
+import { bulkInputEvent, clearInputSink, committedTextFromBeforeInput, committedTextFromInput, shouldClearInputSinkAfterInput, unsupportedInputEvent } from "lib/typing/input_events"
 import { raceProgress } from "lib/typing/race_progress"
 import { TypingSessionState } from "lib/typing/session_state"
 import { preferredSpeedBand, randomExcerptIndex } from "lib/typing/speed_band"
@@ -17,6 +18,7 @@ export default class extends Controller {
     "durationButton",
     "fastRacer",
     "helpOverlay",
+    "inputSink",
     "pausedOverlay",
     "progress",
     "results",
@@ -51,10 +53,15 @@ export default class extends Controller {
   }
 
   focus() {
-    this.typingSurfaceTarget.focus()
+    if (this.hasInputSinkTarget) {
+      this.inputSinkTarget.focus()
+    } else {
+      this.typingSurfaceTarget.focus()
+    }
   }
 
-  surfaceBlurred() {
+  surfaceBlurred(event) {
+    if (this.typingSurfaceTarget.contains(event.relatedTarget)) return
     if (!this.session.started || this.session.finished || this.session.paused) return
 
     this.session.pause()
@@ -113,13 +120,42 @@ export default class extends Controller {
       return
     }
 
-    if (event.ctrlKey || event.metaKey) return
+  }
 
-    if (event.key.length !== 1 || event.altKey) return
+  beforeInput(event) {
+    if (event.isComposing) return
+
+    if (bulkInputEvent(event) || unsupportedInputEvent(event)) {
+      event.preventDefault()
+      clearInputSink(this.inputSinkTarget)
+      return
+    }
+
+    const text = committedTextFromBeforeInput(event)
+    if (!text) return
+    if (!event.cancelable) return
 
     event.preventDefault()
+    this.typeText(text)
+    clearInputSink(this.inputSinkTarget)
+  }
+
+  inputChanged(event) {
+    const text = committedTextFromInput(event, event.currentTarget)
+    if (shouldClearInputSinkAfterInput(event)) clearInputSink(event.currentTarget)
+    if (!text) return
+
+    this.typeText(text)
+  }
+
+  blockBulkInput(event) {
+    event.preventDefault()
+    clearInputSink(this.inputSinkTarget)
+  }
+
+  typeText(text) {
     this.hidePausedOverlay()
-    this.session.type(event.key.toLowerCase())
+    ;[...text].forEach((character) => this.session.type(character))
     this.startTicker()
     this.render()
 

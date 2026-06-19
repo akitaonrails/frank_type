@@ -38,13 +38,13 @@ module Typing
       end
 
       def records
-        Rails.cache.fetch("typing/excerpt_catalog/v2") do
+        Rails.cache.fetch("typing/excerpt_catalog/v3") do
           load_records(Dir[Rails.root.join("config/excerpts/**/*.yml")])
         end
       end
 
       def records_for_language(language)
-        Rails.cache.fetch("typing/excerpt_catalog/#{language}/v2") do
+        Rails.cache.fetch("typing/excerpt_catalog/#{language}/v3") do
           load_records(Dir[Rails.root.join("config/excerpts", language, "**/*.yml")])
         end
       end
@@ -64,7 +64,7 @@ module Typing
       end
 
       def build_excerpt(attributes)
-        normalized_text = TextNormalizer.call(attributes.fetch("text"))
+        normalized_text = TextNormalizer.call(attributes.fetch("text"), locale: attributes.fetch("language"))
 
         Excerpt.new(
           id: attributes.fetch("id"),

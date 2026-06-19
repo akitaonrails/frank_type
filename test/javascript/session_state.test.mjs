@@ -98,6 +98,23 @@ test("TypingSessionState freezes remaining seconds while paused", async () => {
   })
 })
 
+test("TypingSessionState requires exact accented characters", async () => {
+  const { TypingSessionState } = await loadSessionState()
+  const session = new TypingSessionState({ excerpt: excerpt("ç"), durationSeconds: 30 })
+
+  session.type("c", 1000)
+
+  assert.equal(session.correctCharacters, 0)
+  assert.equal(session.keyEvents.at(-1).correct, false)
+
+  const accentedSession = new TypingSessionState({ excerpt: excerpt("ç"), durationSeconds: 30 })
+  accentedSession.type("c\u0327", 1000)
+
+  assert.equal(accentedSession.correctCharacters, 1)
+  assert.equal(accentedSession.keyEvents.at(-1).actual, "ç")
+  assert.equal(accentedSession.keyEvents.at(-1).correct, true)
+})
+
 function excerpt(normalizedText) {
   return {
     id: "test-excerpt",

@@ -5,7 +5,7 @@ export class TypingSessionState {
   constructor({ excerpt, durationSeconds }) {
     this.excerpt = excerpt
     this.durationSeconds = durationSeconds
-    this.targetText = excerpt.normalized_text
+    this.targetText = normalizeText(excerpt.normalized_text)
     this.typedCharacters = []
     this.keyEvents = []
     this.characterTimings = []
@@ -78,6 +78,7 @@ export class TypingSessionState {
 
     if (this.finished || this.cursor >= this.targetText.length) return
 
+    character = normalizeText(character)
     const index = this.cursor
     const expected = this.targetText[index]
     const correct = character === expected
@@ -165,6 +166,10 @@ export class TypingSessionState {
       keyEvents: this.keyEvents
     }
   }
+}
+
+function normalizeText(text) {
+  return text.normalize("NFC").toLowerCase()
 }
 
 function wordIndexFor(text, characterIndex) {

@@ -41,14 +41,21 @@
       <div class="text-subtle ml-auto hidden text-right text-xs sm:block" data-typing-target="stateLabel"><%= t("pages.practice.state_ready") %></div>
     </div>
 
-    <button
-      type="button"
+    <div
       class="typing-surface"
       data-typing-target="typingSurface"
-      data-action="click->typing#focus keydown->typing#keydown blur->typing#surfaceBlurred focus->typing#surfaceFocused"
-      tabindex="0"
-      aria-label="<%= t("pages.practice.typing_area_label") %>"
+      data-action="click->typing#focus keydown->typing#keydown focusin->typing#surfaceFocused focusout->typing#surfaceBlurred"
     >
+      <textarea
+        class="typing-input-sink"
+        data-typing-target="inputSink"
+        data-action="beforeinput->typing#beforeInput input->typing#inputChanged paste->typing#blockBulkInput drop->typing#blockBulkInput"
+        autocomplete="off"
+        autocapitalize="off"
+        autocorrect="off"
+        spellcheck="false"
+        aria-label="<%= t("pages.practice.typing_area_label") %>"
+      ></textarea>
       <span class="typing-paused-overlay hidden" data-typing-target="pausedOverlay" aria-hidden="true">
         <span class="typing-paused-hint"><%= t("pages.practice.paused_hint") %></span>
       </span>
@@ -68,7 +75,7 @@
           <span class="flex flex-wrap gap-2" data-typing-target="slowPairList"></span>
         </span>
       </span>
-    </button>
+    </div>
 
     <div class="race-panel" aria-label="<%= t("pages.practice.race_label") %>">
       <% [["slow", "🐢", "slowRacer"], ["you", "⌨️", "userRacer"], ["fast", "🚀", "fastRacer"]].each do |label, glyph, target| %>
