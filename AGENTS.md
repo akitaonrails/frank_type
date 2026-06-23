@@ -31,6 +31,7 @@ Frank Type is a Rails 8/Hotwire/Tailwind typing trainer for public-domain prose.
 - Current categories are `scifi`, `fantasy`, and `biography`.
 - Keep excerpts public-domain and cite source metadata.
 - pt-BR excerpts may modernize obsolete spellings for contemporary typing practice.
+- Text normalization is per-language and always NFC. The default/en path transliterates to ASCII (`[a-z0-9 ]`); pt-BR preserves the accents `àáâãçéêíóôõúü` with no transliteration. Typed input is normalized to NFC and lowercased before strict, per code point comparison. Do not reintroduce transliteration for pt-BR, switch to NFD, or fold accents during matching.
 - Normal requests should load/cache only the requested locale. Explicit all-corpus/test paths may load every locale.
 - Locale selection order: `params[:locale]`, cookie, browser `Accept-Language`, English fallback.
 - Themes are CSS-variable sets selected via `data-theme` on `<html>` and persisted under `frankType.theme`.
