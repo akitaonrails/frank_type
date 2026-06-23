@@ -5,6 +5,7 @@
 ## [0.2.3] - 2026-06-23
 
 - Merge community pt-BR accent-practice guardrails and additional normalization regression coverage.
+- Refresh dependency and GitHub Actions pins for the release pipeline.
 
 ## [0.2.2] - 2026-06-19
 

@@ -16,7 +16,7 @@ module Typing
       )
     end
 
-    test "preserves brazilian portuguese accents" do
+    test "preserves brazilian portuguese accents for symbol locale" do
       assert_equal(
         "coração ação café",
         TextNormalizer.call("Coração, ação — CAFÉ!", locale: :"pt-BR")
@@ -30,7 +30,7 @@ module Typing
       )
     end
 
-    test "preserves Brazilian Portuguese accents under the pt-BR locale" do
+    test "preserves brazilian portuguese accents for string locale" do
       assert_equal(
         "coração açúcar não",
         TextNormalizer.call("Coração — açúcar, NÃO!", locale: "pt-BR")
@@ -41,11 +41,11 @@ module Typing
       assert_equal "cafe", TextNormalizer.call("Café")
     end
 
-    test "pt-BR output is NFC and keeps the accented word intact" do
-      result = TextNormalizer.call("Coração", locale: "pt-BR")
+    test "pt-BR output composes decomposed input to NFC" do
+      result = TextNormalizer.call("Corac\u0327a\u0303o", locale: "pt-BR")
 
+      assert_equal "coração", result
       assert_equal result, result.unicode_normalize(:nfc)
-      assert_includes result, "coração"
     end
   end
 end
