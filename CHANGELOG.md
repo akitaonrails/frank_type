@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.2.3] - 2026-06-23
+
+- Merge community pt-BR accent-practice guardrails and additional normalization regression coverage.
+
 ## [0.2.2] - 2026-06-19
 
 - Preserve Brazilian Portuguese accents in practice text and accept committed dead-key/Option-produced accented input through a focused text input sink.
