@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+## [0.2.4] - 2026-06-24
+
+- Add an experimental Windows-only Electron desktop build (NSIS installer) that embeds the Rails app, Ruby 3.4.8, and precompiled assets. macOS and Linux packaging are not yet implemented; see the README "Electron desktop" section for the supported commands, prerequisites, and known limitations.
+
 ## [0.2.3] - 2026-06-23
 
 - Merge community pt-BR accent-practice guardrails and additional normalization regression coverage.

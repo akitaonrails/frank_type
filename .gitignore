@@ -45,8 +45,8 @@
 /dist/
 /build/
 
+# Local bundle install output (used by `bundle install` on dev machines)
+/vendor/bundle/
+
 # System packages
 *.deb
-
-# Node.js lockfile (not used, npm is only for Electron dev)
-package-lock.json

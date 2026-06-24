@@ -2,6 +2,11 @@ appId: com.franktype.app
 productName: Frank Type
 copyright: Copyright © 2025 AkitaOnRails
 
+# Rails spawns subprocesses and reads the app tree directly, so we cannot
+# ship the app inside an asar archive. Everything below is unpacked on disk
+# in the installed app folder.
+asar: false
+
 directories:
   output: dist
   buildResources: build
@@ -40,7 +45,10 @@ files:
   - "!CHANGELOG.md"
   - "!README.md"
   - "!LICENSE"
+  - "!scripts/**/*"
 
+# The bundled Windows Ruby runtime is downloaded to ./ruby by
+# scripts/download-ruby.mjs and copied next to the app as an extra resource.
 extraResources:
   - from: ruby
     to: ruby
@@ -61,20 +69,3 @@ nsis:
   deleteAppDataOnUninstall: false
   shortcutName: Frank Type
   createDesktopShortcut: true
-
-mac:
-  target:
-    - target: dmg
-      arch:
-        - x64
-        - arm64
-  category: public.app-category.productivity
-  artifactName: "${productName}-${version}-mac-${arch}.${ext}"
-
-linux:
-  target:
-    - target: AppImage
-      arch:
-        - x64
-  category: Utility
-  artifactName: "${productName}-${version}-linux.${ext}"

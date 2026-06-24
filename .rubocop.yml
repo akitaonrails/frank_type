@@ -1,6 +1,16 @@
 # Omakase Ruby styling for Rails
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
+# Exclude the bundled Windows Ruby runtime downloaded by scripts/download-ruby.mjs.
+# This is third-party code shipped inside the install bundle, not application code.
+AllCops:
+  Exclude:
+    - "ruby/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "dist/**/*"
+    - "out/**/*"
+
 # Overwrite or add rules to create your own house style
 #
 # # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
