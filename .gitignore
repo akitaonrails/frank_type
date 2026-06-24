@@ -37,3 +37,16 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Electron
+/node_modules/
+/out/
+/ruby/
+/dist/
+/build/
+
+# System packages
+*.deb
+
+# Node.js lockfile (not used, npm is only for Electron dev)
+package-lock.json

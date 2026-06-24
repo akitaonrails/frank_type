@@ -1,0 +1,80 @@
+appId: com.franktype.app
+productName: Frank Type
+copyright: Copyright © 2025 AkitaOnRails
+
+directories:
+  output: dist
+  buildResources: build
+
+files:
+  - app/**/*
+  - bin/**/*
+  - config/**/*
+  - db/**/*
+  - lib/**/*
+  - public/**/*
+  - script/**/*
+  - vendor/**/*
+  - electron/**/*
+  - Gemfile
+  - Gemfile.lock
+  - Rakefile
+  - config.ru
+  - .ruby-version
+  - package.json
+  - "!**/*.map"
+  - "!**/*.test.*"
+  - "!test/**/*"
+  - "!docs/**/*"
+  - "!log/**/*"
+  - "!tmp/**/*"
+  - "!.git*"
+  - "!Dockerfile*"
+  - "!docker-compose*"
+  - "!.dockerignore"
+  - "!.github/**/*"
+  - "!.kamal/**/*"
+  - "!docker-bake*"
+  - "!.bundle/**/*"
+  - "!AGENTS.md"
+  - "!CHANGELOG.md"
+  - "!README.md"
+  - "!LICENSE"
+
+extraResources:
+  - from: ruby
+    to: ruby
+    filter:
+      - "**/*"
+
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  artifactName: "${productName}-Setup-${version}-win.${ext}"
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  deleteAppDataOnUninstall: false
+  shortcutName: Frank Type
+  createDesktopShortcut: true
+
+mac:
+  target:
+    - target: dmg
+      arch:
+        - x64
+        - arm64
+  category: public.app-category.productivity
+  artifactName: "${productName}-${version}-mac-${arch}.${ext}"
+
+linux:
+  target:
+    - target: AppImage
+      arch:
+        - x64
+  category: Utility
+  artifactName: "${productName}-${version}-linux.${ext}"

@@ -1,6 +1,22 @@
 {
+  "name": "frank-type",
+  "version": "1.0.0",
+  "main": "electron/main.js",
+  "description": "Typing trainer for public-domain prose",
+  "author": "AkitaOnRails",
   "type": "module",
   "scripts": {
-    "test": "node --test test/javascript/*.test.mjs"
+    "test": "node --test test/javascript/*.test.mjs",
+    "electron": "RAILS_ENV=production electron electron/main.js",
+    "electron:dev": "electron electron/main.js",
+    "build:ruby:win": "node scripts/download-ruby.mjs",
+    "build:win": "BUILD_TARGET=win32 node scripts/download-ruby.mjs && electron-builder build --win --config electron-builder.yml",
+    "build:mac": "electron-builder build --mac --config electron-builder.yml",
+    "build:linux": "electron-builder build --linux --config electron-builder.yml",
+    "dist:all": "electron-builder build --win --mac --linux --config electron-builder.yml"
+  },
+  "devDependencies": {
+    "electron": "^42.4.1",
+    "electron-builder": "^26.15.3"
   }
 }
