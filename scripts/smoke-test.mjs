@@ -60,7 +60,16 @@ test('electron/main.js sets desktop-safe production env', () => {
   const main = readFileSync(resolve(electronDir, 'main.js'), 'utf8')
   assert.ok(main.includes("FORCE_SSL: 'false'"), 'electron/main.js must force SSL off for the local Electron URL')
   assert.ok(main.includes("ASSUME_SSL: 'false'"), 'electron/main.js must assume SSL off for the local Electron URL')
+  assert.ok(main.includes("app.isPackaged ? '127.0.0.1'"), 'packaged Electron must force a loopback host')
   assert.ok(main.includes('loadOrCreateSecretKeyBase'), 'electron/main.js must provide a SECRET_KEY_BASE at runtime')
+  assert.ok(main.includes('randomBytes'), 'electron/main.js must generate SECRET_KEY_BASE with cryptographic randomness')
+})
+
+test('electron/main.js keeps the renderer sandboxed on the local origin', () => {
+  const main = readFileSync(resolve(electronDir, 'main.js'), 'utf8')
+  assert.ok(main.includes('sandbox: true'), 'BrowserWindow must explicitly enable sandbox')
+  assert.ok(main.includes('setWindowOpenHandler'), 'BrowserWindow must block new windows')
+  assert.ok(main.includes('will-navigate'), 'BrowserWindow must block navigation outside the local Rails origin')
 })
 
 test('electron/main.js does not hardcode ~/.rbenv', () => {
@@ -83,7 +92,7 @@ test('download-ruby script pins and verifies SHA256', () => {
   const script = readFileSync(resolve(root, 'scripts/download-ruby.mjs'), 'utf8')
   assert.ok(script.includes('EXPECTED_SHA256'), 'scripts/download-ruby.mjs must pin a SHA256')
   assert.ok(script.includes("createHash('sha256')"), 'scripts/download-ruby.mjs must verify the archive with sha256')
-  assert.ok(script.includes('REPLACE_WITH_PINNED_SHA256'), 'scripts/download-ruby.mjs must refuse to run with a placeholder SHA256')
+  assert.ok(!script.includes('REPLACE_WITH_PINNED_SHA256'), 'scripts/download-ruby.mjs must not ship with a placeholder SHA256')
 })
 
 test('download-ruby script fails on unexpected HTTP status', () => {

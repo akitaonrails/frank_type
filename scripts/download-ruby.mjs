@@ -1,4 +1,4 @@
-import { createWriteStream, existsSync, mkdirSync, readdirSync, statSync, renameSync, rmSync } from 'node:fs'
+import { createReadStream, createWriteStream, existsSync, mkdirSync, readdirSync, statSync, renameSync, rmSync } from 'node:fs'
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import https from 'node:https'
@@ -14,7 +14,7 @@ const ARCHIVE = `rubyinstaller-3.4.8-1-x64.7z`
 const URL = `https://github.com/oneclick/rubyinstaller2/releases/download/${RELEASE}/${ARCHIVE}`
 
 const EXPECTED_SHA256 = process.env.FRANK_TYPE_RUBY_SHA256
-  || 'REPLACE_WITH_PINNED_SHA256_OF_RUBYINSTALLER_3.4.8-1_x64.7z'
+  || 'd1c3ba83ae748c08e35e0b1d9939d45dbca7925e0a8bf84a42860bf19847e0d6'
 
 function getTarget() {
   return process.env.BUILD_TARGET || process.platform
@@ -57,7 +57,7 @@ async function download(url, dest) {
 function sha256OfFile(path) {
   return new Promise((resolve, reject) => {
     const hash = createHash('sha256')
-    const stream = (await import('node:fs')).createReadStream(path)
+    const stream = createReadStream(path)
     stream.on('data', chunk => hash.update(chunk))
     stream.on('end', () => resolve(hash.digest('hex')))
     stream.on('error', reject)

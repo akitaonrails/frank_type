@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url'
 import http from 'node:http'
 import os from 'node:os'
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
+import { randomBytes } from 'node:crypto'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const devRoot = resolve(__dirname, '..')
@@ -22,7 +23,7 @@ function readRubyVersion() {
 
 const EXPECTED_RUBY_VERSION = process.env.FRANK_TYPE_RUBY_VERSION || readRubyVersion()
 const RAILS_ENV = process.env.RAILS_ENV || (app.isPackaged ? 'production' : 'development')
-const HOST = process.env.HOST || '127.0.0.1'
+const HOST = app.isPackaged ? '127.0.0.1' : (process.env.HOST || '127.0.0.1')
 
 function projectRootPath() {
   return app.isPackaged ? resolve(process.resourcesPath, 'app') : devRoot
@@ -66,14 +67,7 @@ function projectEnv() {
 function runRubyProcess(args, extraEnv = {}) {
   const home = rubyHomePath()
   const env = { ...projectEnv(), ...extraEnv }
-  if (home) {
-    return spawn(rubyExecutable(home), args, {
-      cwd: projectRootPath(),
-      stdio: 'inherit',
-      env,
-    })
-  }
-  return spawn(args[0], args.slice(1), {
+  return spawn(rubyExecutable(home), args, {
     cwd: projectRootPath(),
     stdio: 'inherit',
     env,
@@ -139,9 +133,7 @@ function loadOrCreateSecretKeyBase() {
   if (existsSync(path)) {
     return readFileSync(path, 'utf8').trim()
   }
-  const bytes = new Uint8Array(64)
-  for (let i = 0; i < bytes.length; i++) bytes[i] = Math.floor(Math.random() * 256)
-  const key = Buffer.from(bytes).toString('base64')
+  const key = randomBytes(64).toString('base64')
   mkdirSync(dirname(path), { recursive: true })
   writeFileSync(path, key, { mode: 0o600 })
   return key
@@ -194,7 +186,18 @@ async function createWindow() {
       preload: resolve(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true,
+      sandbox: true,
     },
+  })
+
+  const allowedOrigin = new URL(url).origin
+  win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }))
+  win.webContents.on('will-navigate', (event, navigationUrl) => {
+    try {
+      if (new URL(navigationUrl).origin !== allowedOrigin) event.preventDefault()
+    } catch (e) {
+      event.preventDefault()
+    }
   })
 
   win.loadURL(url)
