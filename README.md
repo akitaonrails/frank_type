@@ -115,6 +115,55 @@ GitHub Actions also publishes on pushes to `master`, tags matching `v*`, and man
 - Local profile page with WPM and accuracy trends; older detailed runs compact into daily summaries to keep browser storage bounded.
 - Docker-first local run, Docker Hub publishing, and production Compose deployment.
 
+## Electron desktop (Windows, experimental)
+
+A self-contained Windows installer is produced from the same Rails app, embedding the Ruby runtime, precompiled assets, and an Electron shell. The Rails process listens on a free local port and the renderer connects to it through a `contextIsolated` `BrowserWindow`.
+
+> **Status:** this PR is Windows-only and is shipping as a working but experimental build. macOS and Linux packaging are not yet implemented; the corresponding `npm run` scripts exist but exit with a clear "not yet implemented" message.
+
+### Prerequisites
+
+- Node.js 20+ and npm (the project's own `package-lock.json` pins the exact versions of `electron` and `electron-builder`).
+- Ruby 3.4.8 (matching `.ruby-version`) on `PATH` for the build-time asset precompile. The packed app does not require a system Ruby; the bundled runtime is downloaded as part of the build.
+- 7-Zip on `PATH` for the Ruby download/extract step (`p7zip-full` on Debian/Ubuntu, 7-Zip on Windows).
+
+### Commands
+
+```bash
+npm ci                                    # reproducible install
+npm run assets:precompile                 # one-off, or rely on build:win to do it
+npm run electron:dev                      # run from source against dev Ruby
+npm run electron                          # run from source against production env
+npm run build:win                         # download Ruby, precompile assets, build NSIS installer
+npm run build:ruby:win                    # only download/extract the Windows Ruby
+npm run smoke:test                        # documented packaging smoke test
+```
+
+The smoke test (`scripts/smoke-test.mjs`) is also picked up by `npm test` and verifies the build configuration, runtime contract, and post-build artifacts without needing a real Electron launch.
+
+### How a packaged build is laid out
+
+- `asar: false`. Rails spawns subprocesses and reads the app tree directly, so the install is unpacked on disk.
+- `extraResources` ships the Ruby runtime next to the app, leaving the original `ruby/` source folder out of the bundled output.
+- Assets are precompiled at build time. The runtime never invokes `assets:precompile` or `tailwindcss:build`.
+- A per-installation `SECRET_KEY_BASE` is generated on first launch and stored under `app.getPath('userData')`. This is enough for Rails' `production.rb` defaults and is the only place persistent secret state lives; it never travels with the installer.
+- `HOST=127.0.0.1`, `FORCE_SSL=false`, `ASSUME_SSL=false` are forced at launch so the bundled Rails app talks plain HTTP to the local `BrowserWindow`.
+
+### Verifying a built desktop app
+
+1. `npm run build:win` produces a single NSIS installer under `dist/`.
+2. Run the installer on a clean Windows VM (no Ruby, no Node).
+3. Launch Frank Type from the Start menu shortcut.
+4. Confirm the typing surface renders and the `/up` health check answers (visible in the Windows console window if launched from a terminal).
+5. `npm run smoke:test` re-checks the contract for the build artifacts and is safe to run from CI.
+
+### Known limitations
+
+- Only `win32/x64` is targeted. `npm run build:mac`, `npm run build:linux`, and `npm run dist:all` exist as stubs that exit with an explanatory message.
+- The installer is **not code-signed** and is **not notarized**. Windows SmartScreen and any macOS Gatekeeper equivalent will warn or block the binary; the README does not promise a clean first-launch experience.
+- The downloaded Ruby archive is verified against a pinned SHA256 constant. Until the constant is filled in (the file currently refuses to run with a `REPLACE_WITH_PINNED_SHA256` placeholder), Windows builds will fail loudly.
+- `BUNDLE_PATH` is the bundled runtime's `vendor/bundle` on first launch; this is intended for an offline install and is not a multi-user install path.
+
 ## Keyboard controls
 
 | Key | Action |

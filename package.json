@@ -1,6 +1,25 @@
 {
+  "name": "frank-type",
+  "version": "0.2.4",
+  "main": "electron/main.js",
+  "description": "Typing trainer for public-domain prose",
+  "author": "AkitaOnRails",
   "type": "module",
   "scripts": {
-    "test": "node --test test/javascript/*.test.mjs"
+    "test": "node --test test/javascript/*.test.mjs scripts/smoke-test.mjs",
+    "electron": "RAILS_ENV=production electron electron/main.js",
+    "electron:dev": "electron electron/main.js",
+    "assets:precompile": "node scripts/precompile-assets.mjs",
+    "smoke:test": "node scripts/smoke-test.mjs",
+    "build:ruby:win": "BUILD_TARGET=win32 node scripts/download-ruby.mjs",
+    "build:win": "npm run build:ruby:win && npm run assets:precompile && electron-builder build --win --config electron-builder.yml",
+    "build:mac": "echo 'macOS packaging is not yet implemented in this PR. See CHANGELOG.' && exit 1",
+    "build:linux": "echo 'Linux packaging is not yet implemented in this PR. See CHANGELOG.' && exit 1",
+    "dist:all": "echo 'Multi-platform packaging is not yet implemented in this PR. See CHANGELOG.' && exit 1"
+  },
+  "devDependencies": {
+    "electron": "^42.4.1",
+    "electron-builder": "^26.15.3",
+    "js-yaml": "^4.2.0"
   }
 }

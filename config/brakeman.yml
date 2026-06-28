@@ -1,0 +1,11 @@
+---
+# Brakeman configuration. See https://brakemanscanner.org/docs/options/
+
+# Skip the bundled Windows Ruby runtime and build output; they are not
+# application code.
+:skip_files:
+  - ruby/
+  - dist/
+  - out/
+  - vendor/
+  - tmp/

@@ -37,3 +37,16 @@
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
+
+# Electron
+/node_modules/
+/out/
+/ruby/
+/dist/
+/build/
+
+# Local bundle install output (used by `bundle install` on dev machines)
+/vendor/bundle/
+
+# System packages
+*.deb
