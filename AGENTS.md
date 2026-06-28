@@ -41,6 +41,7 @@ Frank Type is a Rails 8/Hotwire/Tailwind typing trainer for public-domain prose.
 ## Docker and production
 
 - Docker is the primary run/deploy path. Published image target: `akitaonrails/frank_type`.
+- When asked to deploy this project from the local checkout, treat it as verifying the Docker image builds successfully and is pushed to Docker Hub; there is no app-server deploy script in this repo.
 - Production requires `HOST` unless building with `SECRET_KEY_BASE_DUMMY`.
 - Production defaults to SSL/secure cookies; `/up` must remain usable for health checks.
 - Docker Hub publishing uses GitHub secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`.
