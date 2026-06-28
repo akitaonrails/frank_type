@@ -22,6 +22,10 @@ module ActiveSupport
     # Run tests in parallel with specified workers
     parallelize(workers: :number_of_processors)
 
+    teardown do
+      I18n.locale = I18n.default_locale
+    end
+
     # Add more helper methods to be used by all tests here...
   end
 end
