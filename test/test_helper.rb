@@ -5,10 +5,10 @@ if ENV["COVERAGE"] == "true"
 
   SimpleCov.start "rails" do
     enable_coverage :branch
-    add_filter "/test/"
+    skip "/test/"
 
-    add_group "Controllers", "app/controllers"
-    add_group "Services", "app/services"
+    group "Controllers", "app/controllers"
+    group "Services", "app/services"
 
     minimum_coverage line: 85, branch: 70
   end
