@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Load the Rails pieces this app actually uses instead of the full `rails` meta-gem.
-gem "railties", "~> 8.1.3"
+gem "railties", "~> 8.1.4"
 gem "actionpack", "~> 8.1.3"
 gem "actionview", "~> 8.1.3"
 gem "activemodel", "~> 8.1.3"
