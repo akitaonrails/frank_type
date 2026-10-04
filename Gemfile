@@ -4,7 +4,7 @@ source "https://rubygems.org"
 gem "railties", "~> 8.1.3"
 gem "actionpack", "~> 8.1.3"
 gem "actionview", "~> 8.1.3"
-gem "activemodel", "~> 8.1.3"
+gem "activemodel", "~> 8.1.4"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
 # Use the Puma web server [https://github.com/puma/puma]
