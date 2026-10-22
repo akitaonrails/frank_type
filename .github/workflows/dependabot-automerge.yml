@@ -2,8 +2,11 @@
 # jumps. Minor/patch updates (normally the weekly grouped PR) merge once CI
 # is green; majors keep the manual pr-bump review flow.
 #
-# Requires the repository setting "Allow auto-merge" to be enabled:
-# Settings -> General -> Pull Requests -> Allow auto-merge.
+# Merged PRs are closed automatically by GitHub; the repo setting
+# "Automatically delete head branches" (delete_branch_on_merge) removes the
+# Dependabot branch at merge time. Do NOT pass --delete-branch to
+# `gh pr merge --auto`: deleting the branch before the delayed merge fires
+# would close the PR unmerged.
 name: Dependabot auto-merge
 
 on: pull_request
