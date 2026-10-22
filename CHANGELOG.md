@@ -2,9 +2,11 @@
 
 ## [Unreleased]
 
-## [0.2.4] - 2026-06-24
+## [0.2.4] - 2026-10-22
 
 - Add an experimental Windows-only Electron desktop build (NSIS installer) that embeds the Rails app, Ruby 3.4.8, and precompiled assets. macOS and Linux packaging are not yet implemented; see the README "Electron desktop" section for the supported commands, prerequisites, and known limitations.
+- Refresh runtime, test, and security-tooling dependencies, including Rails 8.1.x components, Selenium, SimpleCov, Brakeman, and Thruster.
+- Automate Dependabot minor and patch updates with grouped weekly PRs and CI-gated auto-merge; major bumps still get manual review.
 
 ## [0.2.3] - 2026-06-23
 

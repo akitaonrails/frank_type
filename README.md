@@ -162,7 +162,7 @@ The smoke test (`scripts/smoke-test.mjs`) is also picked up by `npm test` and ve
 - Only `win32/x64` is targeted. `npm run build:mac`, `npm run build:linux`, and `npm run dist:all` exist as stubs that exit with an explanatory message.
 - The installer is **not code-signed** and is **not notarized**. Windows SmartScreen and any macOS Gatekeeper equivalent will warn or block the binary; the README does not promise a clean first-launch experience.
 - The downloaded Ruby archive is verified against a pinned SHA256 constant; update that constant when changing RubyInstaller versions.
-- `BUNDLE_PATH` is the bundled runtime's `vendor/bundle` on first launch; this is intended for an offline install and is not a multi-user install path.
+- Bundled gems install into the bundled Ruby's gem home on first launch, so the first launch requires network access; this is not a multi-user install path.
 
 ## Keyboard controls
 
