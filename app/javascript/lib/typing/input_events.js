@@ -12,6 +12,12 @@ export function committedTextFromInput(event, inputSink) {
   return normalizeTypedText(event.data || inputSink?.value || "")
 }
 
+// Chromium on Wayland commits dead-key composition (´ + a → á) only via
+// compositionend; no non-composing input event follows it.
+export function committedTextFromCompositionEnd(event) {
+  return normalizeTypedText(event.data || "")
+}
+
 export function shouldClearInputSinkAfterInput(event) {
   return !event.isComposing
 }
