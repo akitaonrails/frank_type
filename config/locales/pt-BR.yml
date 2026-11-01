@@ -42,6 +42,8 @@ pt-BR:
         fast: "rápido"
       result_wpm: "PPM"
       see_profile: "Ver perfil"
+      repeat: "Repetir"
+      next_text: "Novo texto"
       help:
         eyebrow: "Teclado"
         title: "Atalhos"

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 
-import { bulkInputEvent, clearInputSink, committedTextFromBeforeInput, committedTextFromInput, shouldClearInputSinkAfterInput, unsupportedInputEvent } from "../../app/javascript/lib/typing/input_events.js"
+import { bulkInputEvent, clearInputSink, committedTextFromBeforeInput, committedTextFromCompositionEnd, committedTextFromInput, shouldClearInputSinkAfterInput, unsupportedInputEvent } from "../../app/javascript/lib/typing/input_events.js"
 
 test("committed beforeinput text accepts accented characters", () => {
   assert.equal(committedTextFromBeforeInput({ inputType: "insertText", data: "cafe\u0301", isComposing: false }), "café")
@@ -49,4 +49,10 @@ test("input sink fallback reads normalized committed text and clears state", () 
   assert.equal(committedTextFromInput({ inputType: "insertText", data: null, isComposing: false }, sink), "ã")
   clearInputSink(sink)
   assert.equal(sink.value, "")
+})
+
+test("compositionend commits the composed dead-key text", () => {
+  assert.equal(committedTextFromCompositionEnd({ data: "ã" }), "ã")
+  assert.equal(committedTextFromCompositionEnd({ data: "A\u0301" }), "á")
+  assert.equal(committedTextFromCompositionEnd({ data: "" }), "")
 })
