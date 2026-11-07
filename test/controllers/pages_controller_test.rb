@@ -16,6 +16,9 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_select "html[data-theme='current']"
     assert_select "body[data-controller~='theme'][data-controller~='typing']"
     assert_select "button[data-theme-theme-param='logo-rush']", text: "Rush"
+    assert_select "textarea[data-action*='compositionend->typing#compositionEnd']"
+    assert_select "button[data-action='typing#resetSession']", text: /Repeat/
+    assert_select "button[data-action='typing#nextExcerpt']", text: /New text/
     assert_includes response.headers.fetch("Content-Security-Policy"), "script-src 'self' 'nonce-"
     assert_match(/<script[^>]+nonce=/, response.body)
   end
@@ -41,6 +44,8 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_select "html[lang='pt-BR']"
     assert_select "#typing-help-title", text: "Atalhos"
+    assert_select "button[data-action='typing#resetSession']", text: /Repetir/
+    assert_select "button[data-action='typing#nextExcerpt']", text: /Novo texto/
     assert_includes response.body, "&quot;language&quot;:&quot;pt-BR&quot;"
     assert_not_includes response.body, "&quot;language&quot;:&quot;en&quot;"
     assert_equal "pt-BR", cookies[:locale]

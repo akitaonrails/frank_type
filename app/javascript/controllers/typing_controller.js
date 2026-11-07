@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { backwardDeletionIntent } from "lib/typing/deletion"
-import { bulkInputEvent, clearInputSink, committedTextFromBeforeInput, committedTextFromInput, shouldClearInputSinkAfterInput, unsupportedInputEvent } from "lib/typing/input_events"
+import { bulkInputEvent, clearInputSink, committedTextFromBeforeInput, committedTextFromCompositionEnd, committedTextFromInput, repeatedCompositionInput, shouldClearInputSinkAfterInput, unsupportedInputEvent } from "lib/typing/input_events"
 import { raceProgress } from "lib/typing/race_progress"
 import { TypingSessionState } from "lib/typing/session_state"
 import { preferredSpeedBand, randomExcerptIndex } from "lib/typing/speed_band"
@@ -105,6 +105,8 @@ export default class extends Controller {
   }
 
   keydown(event) {
+    this.compositionCommitted = false
+
     if (["?", "Escape", "Tab"].includes(event.key)) {
       event.preventDefault()
       event.stopPropagation()
@@ -141,8 +143,24 @@ export default class extends Controller {
   }
 
   inputChanged(event) {
+    // Firefox repeats the committed composition as a non-composing input event.
+    if (repeatedCompositionInput(event, this.compositionCommitted)) {
+      this.compositionCommitted = false
+      clearInputSink(event.currentTarget)
+      return
+    }
+
     const text = committedTextFromInput(event, event.currentTarget)
     if (shouldClearInputSinkAfterInput(event)) clearInputSink(event.currentTarget)
+    if (!text) return
+
+    this.typeText(text)
+  }
+
+  compositionEnd(event) {
+    const text = committedTextFromCompositionEnd(event)
+    clearInputSink(this.inputSinkTarget)
+    this.compositionCommitted = Boolean(text)
     if (!text) return
 
     this.typeText(text)

@@ -42,6 +42,8 @@ en:
         fast: "fast"
       result_wpm: "WPM"
       see_profile: "See profile"
+      repeat: "Repeat"
+      next_text: "New text"
       help:
         eyebrow: "Keyboard"
         title: "Shortcuts"

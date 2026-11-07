@@ -12,6 +12,20 @@ export function committedTextFromInput(event, inputSink) {
   return normalizeTypedText(event.data || inputSink?.value || "")
 }
 
+// Chromium on Wayland commits dead-key composition (´ + a → á) only via
+// compositionend; no non-composing input event follows it.
+export function committedTextFromCompositionEnd(event) {
+  return normalizeTypedText(event.data || "")
+}
+
+// Firefox repeats the committed composition as one non-composing
+// insertCompositionText input event after compositionend. Chrome and Safari
+// dispatch their input events before compositionend, so only that repeated
+// shape needs suppressing after a commit.
+export function repeatedCompositionInput(event, compositionCommitted) {
+  return Boolean(compositionCommitted) && event.inputType === "insertCompositionText"
+}
+
 export function shouldClearInputSinkAfterInput(event) {
   return !event.isComposing
 }
