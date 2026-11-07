@@ -18,6 +18,14 @@ export function committedTextFromCompositionEnd(event) {
   return normalizeTypedText(event.data || "")
 }
 
+// Firefox repeats the committed composition as one non-composing
+// insertCompositionText input event after compositionend. Chrome and Safari
+// dispatch their input events before compositionend, so only that repeated
+// shape needs suppressing after a commit.
+export function repeatedCompositionInput(event, compositionCommitted) {
+  return Boolean(compositionCommitted) && event.inputType === "insertCompositionText"
+}
+
 export function shouldClearInputSinkAfterInput(event) {
   return !event.isComposing
 }

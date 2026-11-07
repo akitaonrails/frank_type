@@ -1,6 +1,6 @@
 import { Controller } from "@hotwired/stimulus"
 import { backwardDeletionIntent } from "lib/typing/deletion"
-import { bulkInputEvent, clearInputSink, committedTextFromBeforeInput, committedTextFromCompositionEnd, committedTextFromInput, shouldClearInputSinkAfterInput, unsupportedInputEvent } from "lib/typing/input_events"
+import { bulkInputEvent, clearInputSink, committedTextFromBeforeInput, committedTextFromCompositionEnd, committedTextFromInput, repeatedCompositionInput, shouldClearInputSinkAfterInput, unsupportedInputEvent } from "lib/typing/input_events"
 import { raceProgress } from "lib/typing/race_progress"
 import { TypingSessionState } from "lib/typing/session_state"
 import { preferredSpeedBand, randomExcerptIndex } from "lib/typing/speed_band"
@@ -144,7 +144,7 @@ export default class extends Controller {
 
   inputChanged(event) {
     // Firefox repeats the committed composition as a non-composing input event.
-    if (this.compositionCommitted && event.inputType === "insertCompositionText") {
+    if (repeatedCompositionInput(event, this.compositionCommitted)) {
       this.compositionCommitted = false
       clearInputSink(event.currentTarget)
       return
