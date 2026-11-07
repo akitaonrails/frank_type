@@ -46,6 +46,16 @@ Frank Type is a Rails 8/Hotwire/Tailwind typing trainer for public-domain prose.
 - Production defaults to SSL/secure cookies; `/up` must remain usable for health checks.
 - Docker Hub publishing uses GitHub secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN`.
 
+## Cleanup after release and Docker verification
+
+Every release, deploy verification, or Docker smoke test leaves leftovers on this shared host. Clean them up before reporting the work done. Be surgical: other projects' images, containers, builders, and caches live on the same Docker daemon, so never run blanket prunes (`docker system prune`, unfiltered `docker image prune`, or `docker builder prune -a`).
+
+- Run smoke-test containers with `--rm` plus an EXIT trap so they self-remove; still check `docker ps -a --filter ancestor=akitaonrails/frank_type` for strays and `docker rm` them.
+- After verification, remove the images that verification pulled or built: digest-pulled smoke images land as dangling (filter `dangling=true` with repository `akitaonrails/frank_type`) plus stale local `akitaonrails/frank_type`/`frank_type` tags. Docker Hub is the source of truth; anything needed later re-pulls.
+- Prune only this repo's buildx cache: `docker buildx prune --builder frank-type-builder --force`. Leave other builders and their caches untouched.
+- Delete `/tmp` scratch dirs and logs the session created, touching only files attributable to this session.
+- Report what was removed and roughly how much space was reclaimed.
+
 ## Important files
 
 - `app/javascript/controllers/typing_controller.js`: main UI controller, shortcuts, heat-map rendering, race strip.
