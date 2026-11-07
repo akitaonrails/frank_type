@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## [0.2.5] - 2026-11-07
+
+- Commit dead-key composition on `compositionend`, so accented characters typed through Chromium's composition path on Wayland advance the run, with a guard against Firefox's repeated input event.
+- Add Repeat (Esc) and New text (Tab) buttons to the results panel in English and Brazilian Portuguese.
+- Patch security advisories across the Rails components (8.1.4.1), `addressable`, `nokogiri`, `loofah`, and `rails-html-sanitizer`.
+- Refresh dependencies: RuboCop 1.92.2 and plugins, Selenium 4.52.0, `json` 3.1.0, `tailwindcss-ruby` 4.3.4, Electron 42.11.18, electron-builder 26.18.0, and `js-yaml` 4.3.2.
+- Pin CI and publishing runners to `ubuntu-24.04`, where the project's Ruby 3.4.8 toolchain is available.
+
 ## [0.2.4] - 2026-10-22
 
 - Add an experimental Windows-only Electron desktop build (NSIS installer) that embeds the Rails app, Ruby 3.4.8, and precompiled assets. macOS and Linux packaging are not yet implemented; see the README "Electron desktop" section for the supported commands, prerequisites, and known limitations.
